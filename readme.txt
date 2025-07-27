@@ -3,3 +3,7 @@ cd projectbavaal/
 python3 -m venv myenv
 source myenv/bin/activate
 pip install -r requirement.txt
+#test on ip
+
+sudo cp gunicorn.socket /etc/systemd/system/gunicorn.socket
+sudo cp gunicorn.service /etc/systemd/system/gunicorn.service

@@ -30,7 +30,7 @@ class WebstorySitemap(Sitemap):
         return WebStory.objects.all()
 
     def location(self, obj):
-        return reverse('webstory:webstory_detail', kwargs={'slug': obj.slug})
+        return reverse('webstory_detail', kwargs={'slug': obj.slug})
     
     def lastmod(self, obj):
         return obj.created_at

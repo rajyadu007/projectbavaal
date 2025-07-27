@@ -132,7 +132,7 @@ STATICFILES_DIRS = [
 
 
 # Or, if you prefer to collect static files from each app's 'static' folder:
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # For production deployment
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # For production deployment
 
 # Media files configuration
 MEDIA_URL = '/media/'
