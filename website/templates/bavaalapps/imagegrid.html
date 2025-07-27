@@ -1,0 +1,79 @@
+
+{% extends "base_app.html" %}
+
+{% block content %}
+    <div class="container mx-auto p-6 flex flex-col items-center">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Image Grid with Captions</h1>
+        <p class="text-gray-600 mb-8 text-lg text-center">Upload images and add captions below each one. Then export as a Word document.</p>
+
+        {% if errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 w-full max-w-2xl" role="alert">
+                <strong class="font-bold">Error!</strong>
+                <span class="block sm:inline">
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </span>
+            </div>
+        {% endif %}
+
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Upload Images</h2>
+            <form action="{% url 'upload_images' %}" method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="cols" class="block text-sm font-medium text-gray-700">Number of columns:</label>
+                    <input type="number" id="cols" name="cols" min="1" max="6" value="{{ cols|default:2 }}" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Below adjustment works only if image size matches space.</p>
+                    <label for="target_width" class="block text-sm font-medium text-gray-700">Target image width (pixels):</label>
+                    <input type="number" id="target_width" name="target_width" min="200" max="1000" value="{{ target_width|default:400 }}" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="target_height" class="block text-sm font-medium text-gray-700">Target image height (pixels):</label>
+                    <input type="number" id="target_height" name="target_height" min="200" max="1000" value="{{ target_height|default:300 }}" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="images" class="block text-sm font-medium text-gray-700">Upload images (up to 12 files):</label>
+                    <input type="file" id="images" name="images" multiple accept="image/jpeg,image/png,image/webp" 
+                           class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out shadow-md">
+                    Process Images
+                </button>
+            </form>
+        </div>
+
+        {% if show_grid %}
+            <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6">Image Grid with Captions</h2>
+                <form action="{% url 'generate_word_document' %}" method="post">
+                    {% csrf_token %}
+                    <div class="grid gap-4" style="grid-template-columns: repeat({{ cols }}, minmax(0, 1fr));">
+                        {% for image_info in processed_images %}
+                            <div class="bg-gray-200 rounded-lg p-4 flex flex-col items-center text-center shadow-md">
+                                <img src="{{ image_info.url }}" alt="Uploaded Image {{ forloop.counter }}" class="max-w-full h-auto rounded-md object-contain" style="height: {{ target_height }}px;">
+                                <input type="text" name="caption_{{ forloop.counter0 }}" 
+                                       value="{{ image_info.caption }}" 
+                                       placeholder="Enter caption here..."
+                                       class="mt-3 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-center focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button type="submit" class="bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 transition duration-200 ease-in-out shadow-md text-lg">
+                            Generate Word Document
+                        </button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

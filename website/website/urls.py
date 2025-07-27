@@ -43,6 +43,7 @@ urlpatterns = [
     path('disclaimer/', views.disclaimer_page, name='disclaimer'),
     path('privacy-policy/', views.policy_page, name='privacy-policy'),
     path('terms-and-conditions/', views.terms_page, name='terms-and-conditions'),
+    path('apps/', include('bavaalapps.urls')),
     path('', include('blog.urls')), # This should be the last 'include' for the root, or place specific paths above it.
 ]
 

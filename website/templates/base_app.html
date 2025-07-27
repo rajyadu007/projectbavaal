@@ -1,0 +1,98 @@
+{% extends 'base_main.html' %}
+{% load static %}
+
+{% block meta %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pageseo.title }}</title>
+    <meta name="description" content="{{ pageseo.meta_description }}">
+    <meta name="robots" content="{{ pageseo.robots }}">
+
+    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{ pageseo.og_title }}">
+    <meta property="og:description" content="{{ pageseo.og_description }}">
+    <meta property="og:url" content="{{ pageseo.og_url }}">
+    <meta property="og:image" content="{{ pageseo.og_image }}">
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="675" />
+    {% if pageseo.og_image_type %}<meta property="og:image:type" content="{{ pageseo.og_image_type }}" />{% endif %}
+    <meta property="og:site_name" content="{{ pageseo.og_site_name }}">
+
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ pageseo.twitter_title }}">
+    <meta name="twitter:description" content="{{ pageseo.twitter_description }}">
+    <meta name="twitter:image" content="{{ pageseo.twitter_image }}">
+    {% if pageseo.twitter_site %}<meta name="twitter:site" content="{{ pageseo.twitter_site }}" />{% endif %}
+    {% if pageseo.twitter_creator %}<meta name="twitter:creator" content="{{ pageseo.twitter_creator }}" />{% endif %}
+
+
+    <!-- Technical SEO -->
+    <link rel="canonical" href="{{ pageseo.canonical_url }}">
+
+    <!-- Additional Meta -->
+    <meta name="author" content="{{ pageseo.author }}">
+    <meta name="keywords" content="{{ pageseo.keywords }}">
+    {% if pageseo.google_site_verification %}<meta name="google-site-verification" content="{{ pageseo.google_site_verification }}">{% endif %}
+    {% if pageseo.apple_mobile_web_app_capable %}<meta name="apple-mobile-web-app-capable" content="{{ pageseo.apple_mobile_web_app_capable }}">{% endif %}
+    {% if pageseo.apple_mobile_web_app_status_bar_style %}<meta name="apple-mobile-web_app_status_bar_style" content="{{ pageseo.apple_mobile_web_app_status_bar_style }}">{% endif %}
+    {% if pageseo.format_detection %}<meta name="format-detection" content="{{ pageseo.format_detection }}">{% endif %}
+
+    <!-- Structured Data (Schema Markup) -->
+   <script type="application/ld+json">
+    {
+      "@context": "{{ pageseo.schema.context }}",
+      "@type": "{{ pageseo.schema.type }}",
+      "name": "{{ pageseo.schema.name }}",
+      "url": "{{ pageseo.schema.url }}",
+      "description": "{{ pageseo.schema.description }}",
+      "applicationCategory": "{{ pageseo.schema.applicationCategory }}",
+      "operatingSystem": "{{ pageseo.schema.operatingSystem }}",
+      "browserRequirements": "{{ pageseo.schema.browserRequirements }}",
+      "screenshot": "{{ pageseo.schema.screenshot }}",
+      {% if pageseo.schema.aggregateRating %}
+      "aggregateRating": {
+        "@type": "{{ pageseo.schema.aggregateRating.type }}",
+        "ratingValue": "{{ pageseo.schema.aggregateRating.ratingValue }}",
+        "reviewCount": "{{ pageseo.schema.aggregateRating.reviewCount }}"
+      },
+      {% endif %}
+      {% if pageseo.schema.offers %}
+      "offers": {
+        "@type": "{{ pageseo.schema.offers.type }}",
+        "price": "{{ pageseo.schema.offers.price }}",
+        "priceCurrency": "{{ pageseo.schema.offers.priceCurrency }}"
+      },
+      {% endif %}
+      "publisher": {
+        "@type": "{{ pageseo.schema.publisher.type }}",
+        "name": "{{ pageseo.schema.publisher.name }}",
+        "url": "{{ pageseo.schema.publisher.url }}"
+      }
+    }
+    </script>
+
+{% endblock %}
+
+{% block body %}
+  <header class="bg-white shadow-sm py-4">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+      <a href="/" class="text-2xl font-bold text-primary mb-4 md:mb-0">bavaal.com</a>
+      <nav class="flex gap-4">
+        <a href="/about/" class="hover:text-primary transition-colors duration-200">About Us</a>
+        <a href="/contact/" class="hover:text-primary transition-colors duration-200">Contact</a>
+        <a href="#" class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300">Login</a>
+        <a href="#" class="px-4 py-2 rounded-md bg-primary text-white border border-primary hover:bg-highlight transition-colors duration-300">Sign Up</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container w-[90%] max-w-6xl mx-auto py-4 flex-grow">
+    {% block content %}{% endblock %}
+  </div>
+
+  {% include 'footer.html' %}
+{% endblock %}
