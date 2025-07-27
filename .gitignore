@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.*
+
+# Django
+#website/db.sqlite3
+#website/media/
+
+# Node & Tailwind
+website/node_modules/
+website/package-lock.json
+
+# Static files
+website/static/css/         # Tailwind output - should be regenerated
+#website/static/images/      # Ignore if dynamically uploaded/generated
+website/static/**/*.map     # Optional: source maps
+!website/assets/css/
+
+# VSCode / IDEs
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Python virtualenvs
+myenv/
+venv/
+ENV/
+env/
