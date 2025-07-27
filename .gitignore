@@ -23,6 +23,7 @@ website/static/css/         # Tailwind output - should be regenerated
 #website/static/images/      # Ignore if dynamically uploaded/generated
 website/static/**/*.map     # Optional: source maps
 !website/assets/css/
+website/staticfiles
 
 # VSCode / IDEs
 .vscode/
