@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ 
+    <div class="search-container bg-white rounded-lg p-6 shadow-md mb-8">
+        <div class="search-header flex flex-col items-start mb-6 md:flex-row md:items-center md:justify-between">
+            <h1 class="search-title text-2xl font-semibold text-primary">Find Influencers</h1>
+            {# Adjusted search-bar classes for better mobile responsiveness #}
+            <div class="search-bar flex w-full mt-4 ml-0 md:max-w-lg md:mt-0 md:ml-8">
+                <input type="text" placeholder="Search influencers..." class="flex-1 px-4 py-3 border border-gray rounded-l-lg text-base focus:outline-none focus:ring-2 focus:ring-primary">
+                <button class="bg-primary text-white border-none px-6 rounded-r-lg cursor-pointer flex items-center justify-center">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="filter-tabs flex gap-4 mb-6 overflow-x-auto pb-2">
+            <div class="filter-tab px-5 py-2 rounded-full bg-gray text-text-light font-medium cursor-pointer transition-all duration-300 active:bg-primary active:text-white">All</div>
+            <div class="filter-tab px-5 py-2 rounded-full bg-gray text-text-light font-medium cursor-pointer transition-all duration-300">New</div>
+            <div class="filter-tab px-5 py-2 rounded-full bg-gray text-text-light font-medium cursor-pointer transition-all duration-300">Popular</div>
+            <div class="filter-tab px-5 py-2 rounded-full bg-gray text-text-light font-medium cursor-pointer transition-all duration-300">Available</div>
+            <div class="filter-tab px-5 py-2 rounded-full bg-gray text-text-light font-medium cursor-pointer transition-all duration-300">Most Subscriber</div>
+        </div>
+
+        <div class="influencer-grid grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 mb-12">
+            <div class="influencer-card bg-white rounded-lg p-6 shadow-md text-center transition-transform duration-300 hover:-translate-y-1">
+                <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Aila John" class="influencer-avatar w-20 h-20 rounded-full object-cover mx-auto mb-4 border-[3px] border-primary">
+                <h3 class="influencer-name font-semibold mb-1">Aila John</h3>
+                <div class="influencer-type text-primary text-sm mb-4">Type: Calb</div>
+            </div>
+
+            <div class="influencer-card bg-white rounded-lg p-6 shadow-md text-center transition-transform duration-300 hover:-translate-y-1">
+                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Alexander John" class="influencer-avatar w-20 h-20 rounded-full object-cover mx-auto mb-4 border-[3px] border-primary">
+                <h3 class="influencer-name">Alexander John</h3>
+                <div class="influencer-type">Type: Mega</div>
+            </div>
+
+            <div class="influencer-card bg-white rounded-lg p-6 shadow-md text-center transition-transform duration-300 hover:-translate-y-1">
+                <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Aima Doe" class="influencer-avatar w-20 h-20 rounded-full object-cover mx-auto mb-4 border-[3px] border-primary">
+                <h3 class="influencer-name">Aima Doe</h3>
+                <div class="influencer-type">Type: Macro</div>
+            </div>
+
+            <div class="influencer-card bg-white rounded-lg p-6 shadow-md text-center transition-transform duration-300 hover:-translate-y-1">
+                <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="John Deo" class="influencer-avatar w-20 h-20 rounded-full object-cover mx-auto mb-4 border-[3px] border-primary">
+                <h3 class="influencer-name">John Deo</h3>
+                <div class="influencer-type">Type: Nano</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title text-2xl font-semibold my-8 text-primary">Top Performing Influencers</h2>
+
+    <div class="top-influencers grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 mb-12">
+        <div class="top-influencer-card bg-white rounded-lg p-6 shadow-md">
+            <div class="top-influencer-header flex items-center mb-6">
+                <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Aima Doe" class="top-influencer-avatar w-15 h-15 rounded-full object-cover mr-4 border-2 border-primary">
+                <div class="top-influencer-info flex-1">
+                    <h3 class="top-influencer-name font-semibold mb-1">Aima Doe</h3>
+                    <div class="top-influencer-type text-primary text-sm">Type: Macro</div>
+                </div>
+            </div>
+
+            <div class="influencer-stats grid grid-cols-3 gap-4 text-center">
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">1.4M</div>
+                    <div class="stat-label text-text-light text-sm">Followers</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">500</div>
+                    <div class="stat-label text-text-light text-sm">Following</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">1.2K</div>
+                    <div class="stat-label text-text-light text-sm">Posts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-influencer-card bg-white rounded-lg p-6 shadow-md">
+            <div class="top-influencer-header flex items-center mb-6">
+                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Alexander John" class="top-influencer-avatar w-15 h-15 rounded-full object-cover mr-4 border-2 border-primary">
+                <div class="top-influencer-info flex-1">
+                    <h3 class="top-influencer-name font-semibold mb-1">Alexander John</h3>
+                    <div class="top-influencer-type text-primary text-sm">Type: Mega</div>
+                </div>
+            </div>
+
+            <div class="influencer-stats grid grid-cols-3 gap-4 text-center">
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">1.4M</div>
+                    <div class="stat-label text-text-light text-sm">Followers</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">500</div>
+                    <div class="stat-label text-text-light text-sm">Following</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">1.2K</div>
+                    <div class="stat-label text-text-light text-sm">Posts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-influencer-card bg-white rounded-lg p-6 shadow-md">
+            <div class="top-influencer-header flex items-center mb-6">
+                <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Aila John" class="top-influencer-avatar w-15 h-15 rounded-full object-cover mr-4 border-2 border-primary">
+                <div class="top-influencer-info flex-1">
+                    <h3 class="top-influencer-name">Aila John</h3>
+                    <div class="top-influencer-type text-primary text-sm">Type: Calb</div>
+                </div>
+            </div>
+
+            <div class="influencer-stats grid grid-cols-3 gap-4 text-center">
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">2.4M</div>
+                    <div class="stat-label text-text-light text-sm">Followers</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">500</div>
+                    <div class="stat-label text-text-light text-sm">Following</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">1.2K</div>
+                    <div class="stat-label text-text-light text-sm">Posts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-influencer-card bg-white rounded-lg p-6 shadow-md">
+            <div class="top-influencer-header flex items-center mb-6">
+                <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="John Deo" class="top-influencer-avatar w-15 h-15 rounded-full object-cover mr-4 border-2 border-primary">
+                <div class="top-influencer-info flex-1">
+                    <h3 class="top-influencer-name font-semibold mb-1">John Deo</h3>
+                    <div class="top-influencer-type text-primary text-sm">Type: Nano</div>
+                </div>
+            </div>
+
+            <div class="influencer-stats grid grid-cols-3 gap-4 text-center">
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">9.0K</div>
+                    <div class="stat-label text-text-light text-sm">Followers</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">500</div>
+                    <div class="stat-label text-text-light text-sm">Following</div>
+                </div>
+                <div class="stat-item p-2">
+                    <div class="stat-value font-bold text-xl mb-1">1.2K</div>
+                    <div class="stat-label text-text-light text-sm">Posts</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-section flex flex-col bg-white rounded-lg shadow-md mb-12 overflow-hidden md:flex-row">
+        <div class="profile-left p-8 flex-1">
+            <div class="profile-header flex items-center mb-6">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Hi! Nawaz" class="profile-avatar w-20 h-20 rounded-full object-cover mr-6 border-[3px] border-primary">
+                <div>
+                    <h2 class="profile-name font-semibold text-2xl mb-1">Hi! Nawaz</h2>
+                    <div class="profile-id text-text-light text-sm">ID: 1224567</div>
+                </div>
+            </div>
+
+            <div class="profile-stats grid grid-cols-2 gap-6 mb-8">
+                <div class="profile-stat bg-light rounded-lg p-4 text-center">
+                    <div class="profile-stat-value font-bold text-2xl text-primary mb-1">560</div>
+                    <div class="profile-stat-label text-text-light text-sm">Likes</div>
+                </div>
+                <div class="profile-stat bg-light rounded-lg p-4 text-center">
+                    <div class="profile-stat-value font-bold text-2xl text-primary mb-1">10.5M</div>
+                    <div class="profile-stat-label text-text-light text-sm">Followers</div>
+                </div>
+                <div class="profile-stat bg-light rounded-lg p-4 text-center">
+                    <div class="profile-stat-value font-bold text-2xl text-primary mb-1">5.2M</div>
+                    <div class="profile-stat-label text-text-light text-sm">Views</div>
+                </div>
+                <div class="profile-stat bg-light rounded-lg p-4 text-center">
+                    <div class="profile-stat-value font-bold text-2xl text-primary mb-1">1.3M</div>
+                    <div class="profile-stat-label text-text-light text-sm">Posts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-right bg-primary text-white p-8 w-full md:w-[300px]">
+            <h3 class="campaign-title text-xl font-semibold mb-6">Recent Campaign</h3>
+
+            <div class="campaign-item mb-6">
+                <h4 class="campaign-name font-semibold mb-1">Digital Marketing</h4>
+                <div class="campaign-metric text-sm opacity-90">2.0M People Engaged</div>
+            </div>
+
+            <div class="campaign-item mb-6">
+                <h4 class="campaign-name font-semibold mb-1">Online Earning Webinar</h4>
+                <div class="campaign-metric text-sm opacity-90">2.0M People Engaged</div>
+            </div>
+
+            <div class="campaign-item mb-6">
+                <h4 class="campaign-name font-semibold mb-1">Piece Revolution</h4>
+                <div class="campaign-metric text-sm opacity-90">2.0M People Engaged</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -37,3 +37,4 @@ myenv/
 venv/
 ENV/
 env/
+temp/

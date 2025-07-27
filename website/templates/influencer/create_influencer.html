@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %} {# Needed for static files if you use them in this template #}
+
+{% block content %}
+    <div class="main flex-grow">
+        <div class="bg-white rounded-2xl p-6 shadow-md mb-8">
+            <h1 class="text-2xl font-semibold text-primary mb-6 text-center md:text-left">{{ page_title }}</h1>
+
+            {# Display Django messages (success, error, warning) #}
+            {% if messages %}
+                <ul class="mb-4">
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }} p-3 rounded-md mb-2 {% if 'success' in message.tags %}bg-green-100 text-green-700{% elif 'error' in message.tags %}bg-red-100 text-red-700{% elif 'warning' in message.tags %}bg-yellow-100 text-yellow-700{% endif %}"{% endif %}>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {# Important: enctype for file uploads #}
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+
+                {# Display non-field errors #}
+                {% if form.non_field_errors %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <strong class="font-bold">Error!</strong>
+                        <span class="block sm:inline">{{ form.non_field_errors }}</span>
+                    </div>
+                {% endif %}
+
+                {# Render each field manually for more control over layout and styling #}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="block text-text text-sm font-medium mb-2">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span class="text-red-500">*</span>
+                            {% endif %}
+                        </label>
+                        
+                        {# Special handling for checkbox fields (like ModelMultipleChoiceField with CheckboxSelectMultiple) #}
+                        {% if field.name == 'categories' %}
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                {% for choice in field %}
+                                    <label class="inline-flex items-center p-2 bg-light rounded-md cursor-pointer hover:bg-gray transition-colors duration-200">
+                                        {{ choice.tag }}
+                                        <span class="ml-2 text-sm text-text">{{ choice.choice_label }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {# Render the field's widget #}
+                            {{ field }}
+                        {% endif %}
+                        
+                        {# Display field errors #}
+                        {% if field.errors %}
+                            <ul class="text-red-500 text-xs italic mt-1">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {# Display help text #}
+                        {% if field.help_text %}
+                            <p class="text-text-light text-xs mt-1">{{ field.help_text }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="w-full md:w-auto px-6 py-3 bg-primary text-white font-semibold rounded-md hover:bg-highlight transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Save Influencer
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

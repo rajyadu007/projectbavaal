@@ -1,0 +1,49 @@
+<!-- templates/base.html -->
+{% extends 'base_main.html' %}
+
+{% block meta %}
+  <title>{{ seo.meta_title|default:"Bavaal - Latest Entertainment, Lifestyle & Celebrity Buzz" }}</title>
+  <meta name="description" content="{{ seo.meta_description|default:"Explore entertainment, health, lifestyle, and celebrity stories." }}">
+  <meta name="keywords" content="{{seo.keywords|default:"Bavaal, celebrity news, entertainment, lifestyle, health, viral stories"}}">
+  <meta name="author" content="{{seo.author|default:"Bavaal.com"}}">
+
+  {% if seo.canonical_url %}
+  <link rel="canonical" href="{{ seo.canonical_url }}">
+  {% endif %}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ seo.meta_title }}">
+  <meta property="og:description" content="{{ seo.meta_description }}">
+  <meta property="og:type" content="{{ seo.og_type }}">
+  {% if seo.og_image %}
+  <meta property="og:image" content="{{ seo.og_image.url }}">
+  {% endif %}
+  <meta property="og:url" content="{{ seo.canonical_url|default:request.build_absolute_uri }}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="{{ seo.twitter_card }}">
+  <meta name="twitter:title" content="{{ seo.meta_title }}">
+  <meta name="twitter:description" content="{{ seo.meta_description }}">
+  {% if seo.twitter_image %}
+  <meta name="twitter:image" content="{{ seo.twitter_image.url }}">
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <header class="bg-white shadow-sm py-4">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+      <a href="/" class="text-2xl font-bold text-primary mb-4 md:mb-0">bavaal.com</a>
+      <nav class="flex gap-4">
+        <a href="#" class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300">Login</a>
+        <a href="#" class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300">Sign Up</a>
+        <a href="{% url 'blog_list' %}" class="px-4 py-2 rounded-md bg-primary text-white border border-primary hover:bg-highlight transition-colors duration-300">Blogs</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container w-[90%] max-w-6xl mx-auto py-4 flex-grow">
+    {% block content %}{% endblock %}
+  </div>
+
+  {% include 'footer.html' %}
+{% endblock %}

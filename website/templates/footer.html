@@ -1,0 +1,20 @@
+{# myapp/templates/footer.html #}
+<footer class="bg-dark text-white py-8 mt-12">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center text-center md:text-left mb-6 md:mb-0">
+            <p class="text-sm mb-4 md:mb-0">&copy; {% now "Y" %} bavaal.com. All rights reserved.</p>
+            <p class="text-sm text-text-light">Designed with <i class="fas fa-heart text-red-500"></i> using Tailwind CSS.</p>
+        </div>
+
+        <div class="border-t border-gray-700 pt-6 mt-6">
+            <h4 class="text-lg font-semibold mb-4 text-center md:text-left">Quick Links</h4>
+            <nav class="flex flex-col md:flex-row md:justify-center md:gap-8 gap-3 text-text-light text-sm">
+                <a href="{% url 'about' %}" class="hover:text-primary transition-colors duration-200">About Us</a>
+                <a href="{% url 'contact' %}" class="hover:text-primary transition-colors duration-200">Contact</a>
+                <a href="{% url 'privacy-policy' %}" class="hover:text-primary transition-colors duration-200">Privacy Policy</a>
+                <a href="{% url 'terms-and-conditions' %}" class="hover:text-primary transition-colors duration-200">Terms of Service</a>
+                <a href="{% url 'custom_sitemap_index' %}" class="hover:text-primary transition-colors duration-200">Sitemap</a>
+            </nav>
+        </div>
+    </div>
+</footer>

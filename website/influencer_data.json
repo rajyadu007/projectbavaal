@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Pooja Janrao",
+    "unique_id": "INF00001",
+    "bio": "Fashion & lifestyle influencer from India.",
+    "type": "MACRO",
+    "followers_count": 500000,
+    "likes_count": 1200000,
+    "views_count": 3000000,
+    "posts_count": 150,
+    "rating": 4.9,
+    "collaborations_count": 12,
+    "instagram_url": "https://instagram.com/pooja_janrao_official",
+    "youtube_url": "https://youtube.com/c/poojajanrao",
+    "twitter_url": "https://twitter.com/pooja_janrao",
+    "blog_content": "Pooja shares fashion hacks and beauty secrets every week.",
+    "profile_image_url": "https://example.com/images/pooja.jpg",
+    "categories": ["Fashion", "Beauty"],
+    "contents": [
+      {
+        "title": "Summer Lookbook 2024",
+        "external_url": "https://youtube.com/watch?v=xyz123",
+        "views_count": 120000,
+        "likes_count": 8000,
+        "content_type": "VIDEO",
+        "published_date": "2024-05-20",
+        "thumbnail_url": "https://example.com/thumbs/lookbook.jpg"
+      }
+    ],
+    "collaborations": [
+      {
+        "campaign_name": "Sephora x Pooja Glow Kit",
+        "external_url": "https://sephora.com/pooja-campaign",
+        "engagement_metric": "2.3M People Engaged",
+        "start_date": "2024-03-10",
+        "end_date": "2024-04-01",
+        "is_sponsored": true,
+        "thumbnail_url": "https://example.com/thumbs/campaign.jpg"
+      }
+    ]
+  }
+]

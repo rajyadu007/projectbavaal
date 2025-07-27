@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Web Stories</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Optional: Google Fonts for a nicer look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons (if needed, though not strictly used in this template for story list) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-100 text-gray-800;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <div class="container mx-auto px-4 py-8 md:py-12 flex-grow">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-indigo-700 mb-8 md:mb-12">
+            Explore Our Web Stories
+        </h1>
+
+        {% if stories %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {% for story in stories %}
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col">
+                        {% if story.cover_image %}
+                            <img src="{{ story.cover_image.url }}" alt="{{ story.title }}"
+                                 class="w-full h-64 object-cover rounded-t-xl">
+                        {% else %}
+                            <!-- Placeholder image if no cover_image is available -->
+                            <img src="https://placehold.co/600x400/a78bfa/4c00b0?text=Web+Story+Image" alt="Placeholder"
+                                 class="w-full h-64 object-cover rounded-t-xl">
+                        {% endif %}
+
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-3 leading-tight">
+                                {# CORRECTED: Removed the extra line numbers (38, 39, 40) #}
+                                <a href="{% url 'webstory:webstory_detail' slug=story.slug %}"
+                                   class="hover:text-indigo-700 transition-colors duration-200">
+                                    {{ story.title }}
+                                </a>
+                            </h2>
+                            <p class="text-gray-600 text-base mb-4 flex-grow">
+                                {# WebStory model has 'content', but for list might want a short excerpt or just title #}
+                                {{ story.content|striptags|truncatechars:100 }}
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500 mt-auto">
+                                <span>
+                                    <i class="fas fa-calendar-alt mr-1"></i> {{ story.created_at|date:"M d, Y" }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center text-gray-600 text-xl py-10">
+                <p>No web stories found.</p>
+                <p class="mt-4">
+                    <a href="{% url 'webstory:list' %}" class="text-indigo-600 hover:underline">Refresh Web Stories</a>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

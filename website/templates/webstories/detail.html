@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ⚡ lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ story.title }}</title>
+  <link rel="canonical" href="">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <style amp-boilerplate>body{visibility:hidden}</style>
+  <style amp-custom>
+    .amp-text-overlay {
+      background-color: rgba(0, 0, 0, 0.6); /* dark semi-transparent */
+      color: white;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    .amp-story-grid-layer {
+      padding: 16px;
+    }
+  </style>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
+</head>
+<body>
+  {{ story.content|safe }}
+</body>
+</html>

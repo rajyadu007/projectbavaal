@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="main flex-grow"> {# flex-grow added to push footer down #}
+        <div class="influencer-header bg-white rounded-2xl p-8 shadow-md mb-8 flex flex-col items-center gap-8 md:flex-row md:text-left">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Maya Rodriguez" class="influencer-image w-52 h-52 object-cover rounded-full border-5 border-primary-light">
+            <div class="influencer-info flex-1">
+                <h1 class="influencer-name text-4xl font-bold mb-2 text-primary">Maya Rodriguez</h1>
+                <div class="flex flex-wrap gap-2 mb-2 justify-center md:justify-start">
+                    <span class="badge inline-block bg-primary-light text-primary px-3 py-1 rounded-full text-xs font-medium">Lifestyle</span>
+                    <span class="badge inline-block bg-primary-light text-primary px-3 py-1 rounded-full text-xs font-medium">Fashion</span>
+                    <span class="badge inline-block bg-primary-light text-primary px-3 py-1 rounded-full text-xs font-medium">Beauty</span>
+                </div>
+
+                <p class="influencer-bio text-text-light my-5 leading-relaxed">Creative content creator specializing in fashion, beauty, and lifestyle. Sharing my journey and inspiring others to live their best life. Collaborations with Sephora, Zara, Nike, and more.</p>
+
+                <div class="stats-grid grid grid-cols-2 gap-4 my-6 md:grid-cols-4">
+                    {# All stat cards now have hover effects #}
+                    <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
+                        <div class="stat-value text-2xl font-bold mb-1">1.2M</div>
+                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Followers</div>
+                    </div>
+                    <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
+                        <div class="stat-value text-2xl font-bold mb-1">24.5M</div>
+                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Likes</div>
+                    </div>
+                    <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
+                        <div class="stat-value text-2xl font-bold mb-1">4.8</div>
+                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Rating</div>
+                    </div>
+                    <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
+                        <div class="stat-value text-2xl font-bold mb-1">328</div>
+                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Collabs</div>
+                    </div>
+                </div>
+
+                <div class="social-links flex gap-3 my-5 justify-center md:justify-start">
+                    <a href="#" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="#" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="#" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section bg-white rounded-2xl p-6 shadow-md mb-8">
+            <div class="section-title flex flex-col items-start gap-2 mb-5 text-primary md:flex-row md:justify-between md:items-center">
+                <h2 class="text-2xl font-semibold">Viral Content</h2>
+                <a href="#" class="view-all text-primary no-underline text-sm font-medium flex items-center gap-1 hover:text-highlight transition-colors duration-200">
+                    View all <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div class="content-grid grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5">
+                <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
+                    <img src="https://images.unsplash.com/photo-1483181957632-8bda974cbc91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Content thumbnail" class="content-thumbnail w-full h-40 object-cover">
+                    <div class="content-details p-4">
+                        <h3 class="content-title font-semibold mb-2 text-base">Summer Outfit Ideas 2023</h3>
+                        <div class="content-meta flex justify-between text-text-light text-xs">
+                            <span><i class="fas fa-eye mr-1"></i> 5.2M</span>
+                            <span><i class="fas fa-heart mr-1"></i> 324K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Content thumbnail" class="content-thumbnail w-full h-40 object-cover">
+                    <div class="content-details p-4">
+                        <h3 class="content-title font-semibold mb-2 text-base">My Skincare Routine</h3>
+                        <div class="content-meta flex justify-between text-text-light text-xs">
+                            <span><i class="fas fa-eye mr-1"></i> 3.8M</span>
+                            <span><i class="fas fa-heart mr-1"></i> 287K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
+                    <img src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Content thumbnail" class="content-thumbnail w-full h-40 object-cover">
+                    <div class="content-details p-4">
+                        <h3 class="content-title font-semibold mb-2 text-base">Minimalist Capsule Wardrobe</h3>
+                        <div class="content-meta flex justify-between text-text-light text-xs">
+                            <span><i class="fas fa-eye mr-1"></i> 2.9M</span>
+                            <span><i class="fas fa-heart mr-1"></i> 198K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section bg-white rounded-2xl p-6 shadow-md mb-8">
+            <div class="section-title flex flex-col items-start gap-2 mb-5 text-primary md:flex-row md:justify-between md:items-center">
+                <h2 class="text-2xl font-semibold">Brand Collaborations</h2>
+                <a href="#" class="view-all text-primary no-underline text-sm font-medium flex items-center gap-1 hover:text-highlight transition-colors duration-200">
+                    View all <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div class="content-grid grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5">
+                <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Brand collab" class="content-thumbnail w-full h-40 object-cover">
+                    <div class="content-details p-4">
+                        <h3 class="content-title font-semibold mb-2 text-base">Sephora Summer Collection</h3>
+                        <div class="content-meta flex justify-between text-text-light text-xs">
+                            <span>June 2023</span>
+                            <span>Sponsored</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Brand collab" class="content-thumbnail w-full h-40 object-cover">
+                    <div class="content-details p-4">
+                        <h3 class="content-title font-semibold mb-2 text-base">Zara New Arrivals</h3>
+                        <div class="content-meta flex justify-between text-text-light text-xs">
+                            <span>May 2023</span>
+                            <span>Sponsored</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
+                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Brand collab" class="content-thumbnail w-full h-40 object-cover">
+                    <div class="content-details p-4">
+                        <h3 class="content-title font-semibold mb-2 text-base">Nike Activewear Campaign</h3>
+                        <div class="content-meta flex justify-between text-text-light text-xs">
+                            <span>April 2023</span>
+                            <span>Sponsored</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="community-section bg-white rounded-2xl p-6 shadow-md">
+            <h2 class="section-title text-2xl font-semibold mb-5 text-primary">Community Chat</h2>
+            <div class="chat-container h-96 overflow-y-auto pr-2">
+                <div class="message mb-5 pb-5 border-b border-primary-light">
+                    <div class="message-header flex items-center mb-2">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="User" class="message-avatar w-9 h-9 rounded-full object-cover mr-3">
+                        <span class="message-user font-semibold text-text">SarahJ</span>
+                        <span class="message-time text-xs text-text-light ml-3">2 hours ago</span>
+                    </div>
+                    <p class="message-content ml-12 text-text-light leading-relaxed text-sm">Love your new makeup tutorial Maya! That eyeshadow look is everything 😍</p>
+                </div>
+
+                <div class="message mb-5 pb-5 border-b border-primary-light">
+                    <div class="message-header flex items-center mb-2">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Maya" class="message-avatar w-9 h-9 rounded-full object-cover mr-3">
+                        <span class="message-user font-semibold text-text">Maya Rodriguez</span>
+                        <span class="message-time text-xs text-text-light ml-3">1 hour ago</span>
+                    </div>
+                    <p class="message-content ml-12 text-text-light leading-relaxed text-sm">Thank you Sarah! I'll be posting a full product list tomorrow ❤️</p>
+                </div>
+
+                <div class="message mb-5 pb-5 border-b border-primary-light">
+                    <div class="message-header flex items-center mb-2">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User" class="message-avatar w-9 h-9 rounded-full object-cover mr-3">
+                        <span class="message-user font-semibold text-text">FashionLover22</span>
+                        <span class="message-time text-xs text-text-light ml-3">45 minutes ago</span>
+                    </div>
+                    <p class="message-content ml-12 text-text-light leading-relaxed text-sm">Where did you get that dress from your last post? It's gorgeous!</p>
+                </div>
+
+                <div class="message mb-5 pb-5 border-b border-primary-light">
+                    <div class="message-header flex items-center mb-2">
+                        <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="User" class="message-avatar w-9 h-9 rounded-full object-cover mr-3">
+                        <span class="message-user font-semibold text-text">BeautyQueen</span>
+                        <span class="message-time text-xs text-text-light ml-3">30 minutes ago</span>
+                    </div>
+                    <p class="message-content ml-12 text-text-light leading-relaxed text-sm">Can you do more budget-friendly skincare recommendations? Love your content!</p>
+                </div>
+            </div>
+
+            <div class="chat-input-container flex gap-4">
+                <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="You" class="chat-input-avatar w-12 h-12 rounded-full object-cover">
+                <div class="chat-input flex-1 flex">
+                    <input type="text" placeholder="Send a message to Maya's community..." class="flex-1 px-5 py-3 bg-light border border-primary-light rounded-full text-base text-text focus:outline-none focus:border-primary">
+                    <button class="chat-send w-12 h-12 rounded-full bg-primary text-white border-none flex items-center justify-center cursor-pointer ml-3 transition-all duration-300 hover:bg-highlight hover:-translate-y-0.5">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

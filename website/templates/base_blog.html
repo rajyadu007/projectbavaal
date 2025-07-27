@@ -1,0 +1,82 @@
+{% extends 'base_main.html' %}
+{% load static %}
+
+{% block meta %}
+  <title>{{ post.title}}</title>
+  <meta name="description" content="{{ post.meta_description }}">
+  <meta name="keywords" content="{{post.meta_keywords|default:"Bavaal, celebrity news, entertainment, lifestyle, health, viral stories"}}">
+  <meta name="author" content="{{post.author|default:"Bavaal.com"}}">
+
+  {% if seo.canonical_url %}
+  <link rel="canonical" href="{{ seo.canonical_url }}">
+  {% endif %}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ post.title }}">
+  <meta property="og:description" content="{{ post.meta_description }}">
+  <meta property="og:type" content="{{ seo.og_type }}">
+  {% if seo.image %}
+  <meta property="og:image" content="{{ seo.image }}">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+  {% endif %}
+  <meta property="og:url" content="{{ seo.canonical_url }}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="{{ seo.twitter_card }}">
+  <meta name="twitter:title" content="{{ post.title }}">
+  <meta name="twitter:description" content="{{ post.meta_description }}">
+  {% if seo.image %}
+  <meta name="twitter:image" content="{{ seo.image  }}">
+  {% endif %}
+   <!-- ✅ JSON-LD Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ post.title|escapejs }}",
+    "image": "{{ seo.image }}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ post.author.get_full_name|default:post.author|default:"Bavaal Staff" }}"
+    },
+
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{seo.canonical_url}}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Bavaal",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/bavaal-logo.png' %}"
+      }
+    },
+    "datePublished": "{{ post.published_date|date:'c' }}",
+    "dateModified": "{{ post.updated_at|default:post.modified_date|date:'c' }}",
+    "description": "{{ post.meta_description|escapejs }}"
+  }
+  </script>
+
+{% endblock %}
+
+{% block body %}
+  <header class="bg-white shadow-sm py-4">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+      <a href="/" class="text-2xl font-bold text-primary mb-4 md:mb-0">bavaal.com</a>
+      <nav class="flex gap-4">
+        <a href="/about/" class="hover:text-primary transition-colors duration-200">About Us</a>
+        <a href="/contact/" class="hover:text-primary transition-colors duration-200">Contact</a>
+        <a href="#" class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300">Login</a>
+        <a href="#" class="px-4 py-2 rounded-md bg-primary text-white border border-primary hover:bg-highlight transition-colors duration-300">Sign Up</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container w-[90%] max-w-6xl mx-auto py-4 flex-grow">
+    {% block content %}{% endblock %}
+  </div>
+
+  {% include 'footer.html' %}
+{% endblock %}

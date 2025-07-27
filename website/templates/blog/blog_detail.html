@@ -1,0 +1,60 @@
+{% extends 'base_blog.html' %}
+{% load static %} {# Load static if you use default images or other static assets #}
+
+{% block content %}
+    <div class="main flex-grow">
+        <div class="bg-white rounded-2xl p-6 shadow-md mb-8">
+            {# Blog Post Title - Ensure strong visual hierarchy #}
+            <h1 class="text-3xl md:text-4xl font-extrabold text-primary mb-2 text-center md:text-left">
+                {{ post.title }}
+            </h1>
+            
+            {# Published Date #}
+            <p class="text-text-light text-sm mb-6 text-center md:text-left">
+                <em>Published: {{ post.published_date|date:"F j, Y" }}</em>
+            </p>
+            
+            {# Featured Image #}
+            {% if post.featured_image %}
+                <div class="mb-8 flex justify-center"> {# Center the image #}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" 
+                         class="w-full h-auto max-w-2xl rounded-lg shadow-md object-cover" 
+                         style="max-width: 600px;"> {# Retaining original max-width for consistency #}
+                </div>
+            {% endif %}
+            
+            {# Post Content (Rich Text) #}
+            <div class="prose max-w-none text-text leading-relaxed mb-8">
+                {# The 'prose' class from @tailwindcss/typography plugin will style the raw HTML content #}
+                {{ post.content|safe }} {# Use |safe to render HTML content #}
+            </div>
+            
+            {# Back to Blog Link #}
+            <a href="{% url 'blog_list' %}" class="inline-block mt-4 text-primary hover:underline flex items-center gap-2 font-medium transition-colors duration-200">
+                <i class="fas fa-arrow-left text-xs"></i> Back to blog
+            </a>
+        </div>
+    </div>
+
+    {# Custom styles to ensure links within prose content match the site's primary color #}
+    <style>
+        .prose a {
+            color: var(--primary); /* Use your primary color variable */
+            text-decoration: none; /* Remove default underline */
+            transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out;
+        }
+        .prose a:hover {
+            text-decoration: underline; /* Add underline on hover */
+            color: var(--highlight); /* Optional: use highlight color on hover */
+        }
+        /* Further styling for headings within prose if default is not enough */
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+            color: var(--text); /* Ensure headings within prose use text color */
+            font-weight: bold; /* Ensure they are bold */
+        }
+        .prose h1 { font-size: 2.25rem; } /* text-4xl */
+        .prose h2 { font-size: 1.875rem; } /* text-3xl */
+        .prose h3 { font-size: 1.5rem; }  /* text-2xl */
+        /* You can adjust these font sizes to match your desired hierarchy */
+    </style>
+{% endblock %}
