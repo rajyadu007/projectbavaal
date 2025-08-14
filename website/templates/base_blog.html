@@ -29,6 +29,10 @@
   {% if seo.image %}
   <meta name="twitter:image" content="{{ seo.image  }}">
   {% endif %}
+
+
+{% endblock %}
+
    <!-- ✅ JSON-LD Structured Data for SEO -->
   <script type="application/ld+json">
   {
@@ -58,8 +62,6 @@
     "description": "{{ post.meta_description|escapejs }}"
   }
   </script>
-
-{% endblock %}
 
 {% block body %}
   <header class="bg-white shadow-sm py-4">

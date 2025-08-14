@@ -41,7 +41,9 @@
     {% if pageseo.apple_mobile_web_app_status_bar_style %}<meta name="apple-mobile-web_app_status_bar_style" content="{{ pageseo.apple_mobile_web_app_status_bar_style }}">{% endif %}
     {% if pageseo.format_detection %}<meta name="format-detection" content="{{ pageseo.format_detection }}">{% endif %}
 
-    <!-- Structured Data (Schema Markup) -->
+{% endblock %}
+
+ <!-- Structured Data (Schema Markup) -->
    <script type="application/ld+json">
     {
       "@context": "{{ pageseo.schema.context }}",
@@ -74,9 +76,7 @@
       }
     }
     </script>
-
-{% endblock %}
-
+    
 {% block body %}
   <header class="bg-white shadow-sm py-4">
     <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">

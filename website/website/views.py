@@ -58,6 +58,9 @@ def custom_sitemap_index(request):
             "location": f"{base_url}/webstory-sitemap.xml",
             "lastmod": get_latest(WebStory, 'updated_at'),  # use meaningful field if available
         },
+        {
+            "location": f"{base_url}/pages-sitemap.xml",
+        },
     ]
 
     xml = render_to_string("sitemap_index.xml", {"sitemaps": sitemaps})

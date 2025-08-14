@@ -16,7 +16,7 @@ class PostSitemap(Sitemap):
 
 class CategorySitemap(Sitemap):
     def items(self):
-        return Category.objects.all()
+        return Category.objects.order_by('id')
 
     def location(self, obj):
         return reverse('category_detail', kwargs={'slug': obj.slug})
@@ -27,10 +27,27 @@ class CategorySitemap(Sitemap):
 
 class WebstorySitemap(Sitemap):
     def items(self):
-        return WebStory.objects.all()
+        return WebStory.objects.order_by('id')
 
     def location(self, obj):
         return reverse('webstory_detail', kwargs={'slug': obj.slug})
     
     def lastmod(self, obj):
         return obj.created_at
+
+class StaticSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.5
+    
+    def items(self):
+        return [
+            'image-grid',
+            'about',
+            'contact',
+            'privacy-policy',
+            'terms-and-conditions',
+            'disclaimer',
+        ]
+        
+    def location(self, item):
+        return reverse(item)

@@ -11,6 +11,7 @@ sitemaps = {
     'post': sm.PostSitemap,
     'category': sm.CategorySitemap,
     'webstory' : sm.WebstorySitemap,
+    'pages': sm.StaticSitemap,
 }
 
 urlpatterns = [
