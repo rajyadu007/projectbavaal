@@ -1,65 +1,77 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
+{% load video_filters %}
 
 {% block content %}
     <div class="main flex-grow">
         {# Influencer Header Section #}
         <div class="influencer-header bg-white rounded-2xl p-8 shadow-md mb-8 flex flex-col items-center gap-8 md:flex-row md:text-left">
-            {# Conditional rendering for profile_image #}
-            {% if influencer.profile_image %}
-                <img src="{{ influencer.profile_image.url }}" alt="{{ influencer.name }}" class="influencer-image w-52 h-52 object-cover rounded-full border-5 border-primary-light">
+            {# Profile Image #}
+            {% if influencer.profile_pic %}
+                <img src="{{ influencer.profile_pic.url }}" alt="{{ influencer.name }}" class="influencer-image w-52 h-52 object-cover rounded-full border-5 border-primary-light">
             {% else %}
-                {# Provide a fallback image if no profile_image is uploaded #}
                 <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Image" class="influencer-image w-52 h-52 object-cover rounded-full border-5 border-primary-light">
             {% endif %}
+            
             <div class="influencer-info flex-1">
                 <h1 class="influencer-name text-4xl font-bold mb-2 text-primary">{{ influencer.name }}</h1>
-                <div class="flex flex-wrap gap-2 mb-2 justify-center md:justify-start">
-                    {% for category in influencer.categories.all %}
-                        <span class="badge inline-block bg-primary-light text-primary px-3 py-1 rounded-full text-xs font-medium">{{ category.name }}</span>
-                    {% endfor %}
-                </div>
-
-                <p class="influencer-bio text-text-light my-5 leading-relaxed">{{ influencer.bio }}</p>
+                {% if influencer.nickname %}
+                    <p class="text-lg text-text-light mb-2">"{{ influencer.nickname }}"</p>
+                {% endif %}
+                
+                {% if influencer.profile_summary %}
+                    <p class="influencer-summary text-text-light my-3 leading-relaxed font-medium">{{ influencer.profile_summary }}</p>
+                {% endif %}
 
                 <div class="stats-grid grid grid-cols-2 gap-4 my-6 md:grid-cols-4">
+                    {% if influencer.instagram_followers %}
                     <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
-                        <div class="stat-value text-2xl font-bold mb-1">{{ influencer.get_formatted_followers }}</div>
+                        <div class="stat-value text-2xl font-bold mb-1">{{ influencer.instagram_followers|intcomma }}</div>
                         <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Followers</div>
                     </div>
+                    {% endif %}
+                    
+                    {% if influencer.estimated_net_worth %}
                     <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
-                        <div class="stat-value text-2xl font-bold mb-1">{{ influencer.get_formatted_likes }}</div>
-                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Likes</div>
+                        <div class="stat-value text-2xl font-bold mb-1">${{ influencer.estimated_net_worth|intcomma }}</div>
+                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Net Worth</div>
                     </div>
+                    {% endif %}
+                    
+                    {% if influencer.age %}
                     <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
-                        <div class="stat-value text-2xl font-bold mb-1">{{ influencer.rating|floatformat:1 }}</div>
-                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Rating</div>
+                        <div class="stat-value text-2xl font-bold mb-1">{{ influencer.age }}</div>
+                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Age</div>
                     </div>
+                    {% endif %}
+                    
+                    {% if influencer.profession %}
                     <div class="stat-card group bg-light text-text rounded-xl p-4 text-center transition-all duration-300 hover:bg-primary hover:text-white">
-                        <div class="stat-value text-2xl font-bold mb-1">{{ influencer.collaborations_count }}</div>
-                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Collabs</div>
+                        <div class="stat-value text-xl font-bold mb-1">{{ influencer.profession }}</div>
+                        <div class="stat-label text-text-light text-sm group-hover:text-white group-hover:opacity-90">Profession</div>
                     </div>
+                    {% endif %}
                 </div>
 
                 <div class="social-links flex gap-3 my-5 justify-center md:justify-start">
-                    {% if influencer.instagram_url %}
-                        <a href="{{ influencer.instagram_url }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                    {% if influencer.instagram_handle %}
+                        <a href="https://instagram.com/{{ influencer.instagram_handle }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
                             <i class="fab fa-instagram"></i>
                         </a>
                     {% endif %}
-                    {% if influencer.tiktok_url %}
-                        <a href="{{ influencer.tiktok_url }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                    {% if influencer.tiktok_handle %}
+                        <a href="https://tiktok.com/@{{ influencer.tiktok_handle }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
                             <i class="fab fa-tiktok"></i>
                         </a>
                     {% endif %}
-                    {% if influencer.youtube_url %}
-                        <a href="{{ influencer.youtube_url }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                    {% if influencer.youtube_channel %}
+                        <a href="https://youtube.com/{{ influencer.youtube_channel }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
                             <i class="fab fa-youtube"></i>
                         </a>
                     {% endif %}
-                    {% if influencer.twitter_url %}
-                        <a href="{{ influencer.twitter_url }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
+                    {% if influencer.twitter_handle %}
+                        <a href="https://twitter.com/{{ influencer.twitter_handle }}" target="_blank" class="social-link w-10 h-10 rounded-full bg-light flex items-center justify-center text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5">
                             <i class="fab fa-twitter"></i>
                         </a>
                     {% endif %}
@@ -67,86 +79,237 @@
             </div>
         </div>
 
-        {# Viral Content Section #}
-        <div class="section bg-white rounded-2xl p-6 shadow-md mb-8">
-            <div class="section-title flex flex-col items-start gap-2 mb-5 text-primary md:flex-row md:justify-between md:items-center">
-                <h2 class="text-2xl font-semibold">Viral Content</h2>
-                <a href="#" class="view-all text-primary no-underline text-sm font-medium flex items-center gap-1 hover:text-highlight transition-colors duration-200">
-                    View all <i class="fas fa-arrow-right text-xs"></i>
-                </a>
-            </div>
-            <div class="content-grid grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5">
-                {% for content in influencer.contents.all|slice:":3" %}
-                    <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
-                        {# Conditional rendering for content thumbnail #}
-                        {% if content.thumbnail %}
-                            <img src="{{ content.thumbnail.url }}" alt="Content thumbnail" class="content-thumbnail w-full h-40 object-cover">
-                        {% else %}
-                            {# Provide a fallback image if no thumbnail is uploaded #}
-                            <img src="{% static 'images/default_content_thumbnail.png' %}" alt="Default Content Thumbnail" class="content-thumbnail w-full h-40 object-cover bg-gray-200">
-                        {% endif %}
-                        <div class="content-details p-4">
-                            <h3 class="content-title font-semibold mb-2 text-base">{{ content.title }}</h3>
-                            <div class="content-meta flex justify-between text-text-light text-xs">
-                                <span><i class="fas fa-eye mr-1"></i> {{ content.views_count|floatformat:0|intcomma }}</span>
-                                <span><i class="fas fa-heart mr-1"></i> {{ content.likes_count|floatformat:0|intcomma }}</span>
-                            </div>
+        <div class="poster-container w-full mb-8 rounded-2xl overflow-hidden shadow-md bg-gray-100">
+            {# Poster Image - Optimized for 1280x720 #}
+            {% if influencer.poster_pic %}
+                <img src="{{ influencer.poster_pic.url }}" 
+                    alt="{{ influencer.name }} poster" 
+                    class="w-full aspect-video object-contain mx-auto bg-white"
+                    loading="lazy">
+            {% else %}
+                <img src="{% static 'images/default_poster_pic.png' %}" 
+                    alt="{{ influencer.name }} poster" 
+                    class="w-full aspect-video object-contain mx-auto bg-white"
+                    loading="lazy">
+            {% endif %}
+        </div>
+
+        {# Main Content Sections #}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {# Left Column - Personal Details #}
+            <div class="lg:col-span-1 space-y-6">
+                {# Personal Details Card #}
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Personal Details</h2>
+                    <div class="space-y-4">
+                        {% if influencer.full_name %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Full Name:</span>
+                            <span class="detail-value">{{ influencer.full_name }}</span>
                         </div>
+                        {% endif %}
+                        
+                        {% if influencer.date_of_birth %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Date of Birth:</span>
+                            <span class="detail-value">{{ influencer.date_of_birth }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if influencer.place_of_birth %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Place of Birth:</span>
+                            <span class="detail-value">{{ influencer.place_of_birth }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if influencer.height_cm %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Height:</span>
+                            <span class="detail-value">{{ influencer.height_cm }} cm</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if influencer.hair_color %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Hair Color:</span>
+                            <span class="detail-value">{{ influencer.hair_color }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if influencer.eye_color %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Eye Color:</span>
+                            <span class="detail-value">{{ influencer.eye_color }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if influencer.education %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Education:</span>
+                            <span class="detail-value">{{ influencer.education }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if influencer.hobbies %}
+                        <div class="detail-item">
+                            <span class="detail-label font-medium text-text-light">Hobbies:</span>
+                            <span class="detail-value">{{ influencer.hobbies }}</span>
+                        </div>
+                        {% endif %}
                     </div>
-                {% empty %}
-                    <p>No viral content available yet.</p>
-                {% endfor %}
+                </div>
+
+                {# Assets Card #}
+                {% if influencer.assets %}
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Assets</h2>
+                    <div class="assets-content">
+                        {{ influencer.assets|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            {# Middle Column - Main Content #}
+            <div class="lg:col-span-2 space-y-6">
+                {# Biography Card #}
+                {% if influencer.biography %}
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Biography</h2>
+                    <div class="biography-content prose max-w-none">
+                        {{ influencer.biography|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Brand Collaborations Card #}
+                {% if influencer.brand_collaborations %}
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Brand Collaborations</h2>
+                    <div class="collaborations-content">
+                        {{ influencer.brand_collaborations|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Media Appearances Card #}
+                {% if influencer.media_appearances %}
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Media Appearances</h2>
+                    <div class="media-content">
+                        {{ influencer.media_appearances|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Businesses Card #}
+                {% if influencer.businesses %}
+                <div class="bg-white rounded-2xl p-6 shadow-md">
+                    <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Businesses</h2>
+                    <div class="businesses-content">
+                        {{ influencer.businesses|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
 
-        {# Brand Collaborations Section #}
-        <div class="section bg-white rounded-2xl p-6 shadow-md mb-8">
-            <div class="section-title flex flex-col items-start gap-2 mb-5 text-primary md:flex-row md:justify-between md:items-center">
-                <h2 class="text-2xl font-semibold">Brand Collaborations</h2>
-                <a href="#" class="view-all text-primary no-underline text-sm font-medium flex items-center gap-1 hover:text-highlight transition-colors duration-200">
-                    View all <i class="fas fa-arrow-right text-xs"></i>
-                </a>
-            </div>
-            <div class="content-grid grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5">
-                {% for collab in influencer.collaborations.all|slice:":3" %}
-                    <div class="content-card rounded-xl overflow-hidden transition-all duration-300 border border-primary-light hover:-translate-y-1 hover:shadow-lg hover:border-primary">
-                        {# Conditional rendering for collaboration thumbnail #}
-                        {% if collab.thumbnail %}
-                            <img src="{{ collab.thumbnail.url }}" alt="Brand collab" class="content-thumbnail w-full h-40 object-cover">
-                        {% else %}
-                            {# Provide a fallback image if no thumbnail is uploaded #}
-                            <img src="{% static 'images/default_collab_thumbnail.png' %}" alt="Default Collaboration Thumbnail" class="content-thumbnail w-full h-40 object-cover bg-gray-200">
-                        {% endif %}
-                        <div class="content-details p-4">
-                            <h3 class="content-title font-semibold mb-2 text-base">{{ collab.campaign_name }}</h3>
-                            <div class="content-meta flex justify-between text-text-light text-xs">
-                                <span>{{ collab.start_date|date:"F Y" }}</span>
-                                <span>{% if collab.is_sponsored %}Sponsored{% else %}Organic{% endif %}</span>
-                            </div>
+        {# Gallery Section #}
+        {% if influencer.images.all or influencer.videos.all or influencer.tweets.all %}
+        <div class="gallery-section mt-8 bg-white rounded-2xl p-6 shadow-md">
+            <h2 class="section-title text-2xl font-semibold mb-5 text-primary">Gallery</h2>
+            
+            {# Images #}
+            {% if influencer.images.all %}
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-primary-light">Images</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {% for image in influencer.images.all %}
+                    <div class="gallery-item rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <img src="{{ image.image_url }}" alt="{{ image.caption|default:'Influencer image' }}" class="w-full h-48 object-cover">
+                        {% if image.caption %}
+                        <div class="p-3 bg-light">
+                            <p class="text-sm text-text">{{ image.caption }}</p>
                         </div>
+                        {% endif %}
                     </div>
-                {% empty %}
-                    <p>No brand collaborations available yet.</p>
-                {% endfor %}
-            </div>
-        </div>
-
-        {# Community Chat Section (remains static for now) #}
-        <div class="community-section bg-white rounded-2xl p-6 shadow-md">
-            <h2 class="section-title text-2xl font-semibold mb-5 text-primary">Community Chat</h2>
-            <div class="chat-container h-96 overflow-y-auto pr-2">
-                {# ... static chat messages ... #}
-            </div>
-            <div class="chat-input-container flex gap-4">
-                {# This avatar should be dynamic, showing the currently logged-in user's avatar #}
-                <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="You" class="chat-input-avatar w-12 h-12 rounded-full object-cover">
-                <div class="chat-input flex-1 flex">
-                    <input type="text" placeholder="Send a message to Maya's community..." class="flex-1 px-5 py-3 bg-light border border-primary-light rounded-full text-base text-text focus:outline-none focus:border-primary">
-                    <button class="chat-send w-12 h-12 rounded-full bg-primary text-white border-none flex items-center justify-center cursor-pointer ml-3 transition-all duration-300 hover:bg-highlight hover:-translate-y-0.5">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
+            
+            {# Videos #}
+            {% if influencer.videos.all %}
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-primary-light">Videos</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for video in influencer.videos.all %}
+                    <div class="video-item rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+                        {% if video.source == 'youtube' %}
+                            {# YouTube embed #}
+                            <iframe src="https://www.youtube.com/embed/{{ video.video_url|youtube_id }}" class="w-full h-64" frameborder="0" allowfullscreen></iframe>
+                        {% else %}
+                            {# Instagram embed - note: Instagram embeds are more complex and might need JavaScript #}
+                            <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                                <a href="{{ video.video_url }}" target="_blank" class="text-primary">View on Instagram</a>
+                            </div>
+                        {% endif %}
+                        {% if video.caption %}
+                        <div class="p-3 bg-light">
+                            <p class="text-sm text-text">{{ video.caption }}</p>
+                            <p class="text-xs text-text-light mt-1">Source: {{ video.get_source_display }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {# Tweets #}
+            {% if influencer.tweets.all %}
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-primary-light">Tweets</h3>
+                <div class="grid grid-cols-1 gap-4">
+                    {% for tweet in influencer.tweets.all %}
+                    <div class="tweet-item rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-light p-4">
+                        <blockquote class="twitter-tweet" data-lang="en">
+                            <a href="{{ tweet.tweet_url }}"></a>
+                        </blockquote>
+                        {% if tweet.caption %}
+                        <p class="text-sm text-text mt-2">{{ tweet.caption }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# Achievements & Controversies Section #}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            {% if influencer.achievements %}
+            <div class="bg-white rounded-2xl p-6 shadow-md">
+                <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Achievements</h2>
+                <div class="achievements-content">
+                    {{ influencer.achievements|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if influencer.controversies %}
+            <div class="bg-white rounded-2xl p-6 shadow-md">
+                <h2 class="section-title text-2xl font-semibold mb-5 text-primary border-b pb-2">Controversies</h2>
+                <div class="controversies-content">
+                    {{ influencer.controversies|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
+
+    {# Twitter widget script #}
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endblock %}

@@ -1,0 +1,84 @@
+name: John Doe
+
+slug: john-doe
+
+profile_pic: /static/images/default_profile.png
+
+poster_pic: /static/images/default_poster.png
+
+full_name: Jonathan Doe
+
+nickname: Johnny
+
+date_of_birth: 1990-05-10
+
+place_of_birth: New York
+
+age: 35
+
+height_cm: 180
+
+hair_color: Black
+
+eye_color: Brown
+
+education: Bachelor of Arts in Music
+
+profession: Singer
+
+biography: John Doe is a popular singer...
+
+profile_summary: Award-winning musician
+
+instagram_handle: "@johndoe"
+
+instagram_followers: 500000
+
+youtube_channel: "https://www.youtube.com/@johndoe"
+
+tiktok_handle: "@johnnydoe"
+
+twitter_handle: "@johnnydoe"
+
+brand_collaborations: Nike, Coca-Cola
+
+media_appearances: MTV, BBC
+
+businesses: Doe Music Productions
+
+hobbies: Singing, Traveling, Cooking
+
+estimated_net_worth: 2000000
+
+assets: Luxury cars, villa
+
+achievements: Grammy Award
+
+public_perception: Loved by fans
+
+controversies: None
+
+images:
+
+  - image_url: https://picsum.photos/id/101/600/600
+
+    caption: Live concert
+
+  - image_url: https://picsum.photos/id/102/600/600
+
+    caption: Recording studio
+
+videos:
+
+  - source: youtube
+
+    video_url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+    caption: Music video
+
+tweets:
+
+  - tweet_url: https://twitter.com/example/status/123456
+
+    caption: My latest concert
+

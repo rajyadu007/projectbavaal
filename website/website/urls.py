@@ -3,6 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.contrib.sitemaps.views import sitemap
+from influencer.views import yaml_upload_view
 from . import sitemaps as sm 
 from . import views 
 from influencer.views import profile_detail
@@ -12,6 +13,7 @@ sitemaps = {
     'category': sm.CategorySitemap,
     'webstory' : sm.WebstorySitemap,
     'pages': sm.StaticSitemap,
+    'profiles' : sm.InfluencersSitemap,
 }
 
 urlpatterns = [
@@ -45,6 +47,7 @@ urlpatterns = [
     path('privacy-policy/', views.policy_page, name='privacy-policy'),
     path('terms-and-conditions/', views.terms_page, name='terms-and-conditions'),
     path('apps/', include('bavaalapps.urls')),
+    path("yaml-upload/", yaml_upload_view, name="yaml_upload"),
     path('', include('blog.urls')), # This should be the last 'include' for the root, or place specific paths above it.
 ]
 

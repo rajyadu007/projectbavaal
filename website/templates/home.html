@@ -23,11 +23,13 @@
         </div>
 
         <div class="influencer-grid grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 mb-12">
+            {% for influencer in influencers %}
             <div class="influencer-card bg-white rounded-lg p-6 shadow-md text-center transition-transform duration-300 hover:-translate-y-1">
-                <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Aila John" class="influencer-avatar w-20 h-20 rounded-full object-cover mx-auto mb-4 border-[3px] border-primary">
-                <h3 class="influencer-name font-semibold mb-1">Aila John</h3>
-                <div class="influencer-type text-primary text-sm mb-4">Type: Calb</div>
+                <img src="{{ influencer.profile_image.url}}" alt="{{ influencer.name }}" class="influencer-avatar w-20 h-20 rounded-full object-cover mx-auto mb-4 border-[3px] border-primary">
+                <h3 class="influencer-name font-semibold mb-1">{{ influencer.name }}</h3>
+                <div class="influencer-type text-primary text-sm mb-4"></div>
             </div>
+            {% endfor %}
 
             <div class="influencer-card bg-white rounded-lg p-6 shadow-md text-center transition-transform duration-300 hover:-translate-y-1">
                 <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Alexander John" class="influencer-avatar w-20 h-20 rounded-full object-cover mx-auto mb-4 border-[3px] border-primary">

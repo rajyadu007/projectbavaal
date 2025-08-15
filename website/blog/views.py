@@ -1,6 +1,7 @@
 # blog/views.py
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Category # Ensure Category is imported
+from influencer.models import Influencer
 
 
 def home_view(request):
@@ -17,7 +18,9 @@ def home_view(request):
         'twitter_description': "Your daily dose of celebrity buzz, lifestyle tips and health updates at Bavaal.",
         'twitter_image': None,  # Same as above
     }
-    return render(request, 'home.html', {'seo': seo})
+    influencers = Influencer.objects.order_by('-created_at')[:4]
+
+    return render(request, 'home.html', {'seo': seo, 'influencers': influencers,})
     
 def blog_list(request):
     selected_category_slug = request.GET.get('category') # Get the category slug from the URL

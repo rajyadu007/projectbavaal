@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.template.loader import render_to_string
 from webstory.models import WebStory
+from influencer.models import Influencer
 from blog.models import Post, Category
 from django.conf import settings
 import os
@@ -46,6 +47,10 @@ def custom_sitemap_index(request):
     base_url = request.build_absolute_uri('/')[:-1]  # removes trailing slash
 
     sitemaps = [
+        {
+            "location": f"{base_url}/profiles-sitemap.xml",
+            "lastmod": get_latest(Influencer, 'updated_at'),  # use meaningful field if available
+        },
         {
             "location": f"{base_url}/post-sitemap.xml",
             "lastmod": get_latest(Post, 'published_date'),
