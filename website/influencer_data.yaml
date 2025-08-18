@@ -1,84 +1,78 @@
-name: John Doe
-
-slug: john-doe
-
-profile_pic: /static/images/default_profile.png
-
-poster_pic: /static/images/default_poster.png
-
-full_name: Jonathan Doe
-
-nickname: Johnny
-
-date_of_birth: 1990-05-10
-
-place_of_birth: New York
-
-age: 35
-
-height_cm: 180
-
-hair_color: Black
-
-eye_color: Brown
-
-education: Bachelor of Arts in Music
-
-profession: Singer
-
-biography: John Doe is a popular singer...
-
-profile_summary: Award-winning musician
-
-instagram_handle: "@johndoe"
-
-instagram_followers: 500000
-
-youtube_channel: "https://www.youtube.com/@johndoe"
-
-tiktok_handle: "@johnnydoe"
-
-twitter_handle: "@johnnydoe"
-
-brand_collaborations: Nike, Coca-Cola
-
-media_appearances: MTV, BBC
-
-businesses: Doe Music Productions
-
-hobbies: Singing, Traveling, Cooking
-
-estimated_net_worth: 2000000
-
-assets: Luxury cars, villa
-
-achievements: Grammy Award
-
-public_perception: Loved by fans
-
-controversies: None
-
-images:
-
-  - image_url: https://picsum.photos/id/101/600/600
-
-    caption: Live concert
-
-  - image_url: https://picsum.photos/id/102/600/600
-
-    caption: Recording studio
-
-videos:
-
-  - source: youtube
-
-    video_url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
-
-    caption: Music video
-
-tweets:
-
-  - tweet_url: https://twitter.com/example/status/123456
-
-    caption: My latest concert
-
+# A list of influencer profiles
+- name: Burak Özçivit
+  profile_pic: /static/images/burak_ozcivit_profile.png
+  poster_pic: /static/images/burak_ozcivit_poster.png
+  full_name: Burak Özçivit
+  nickname: Burak
+  date_of_birth: 1984-12-24
+  place_of_birth: Istanbul, Turkey
+  height_cm: 184
+  hair_color: Black
+  eye_color: Brown
+  education: Bachelor of Arts, Marmara University, Faculty of Fine Arts (Photography)
+  profession: Actor, Model, Producer
+  biography: >
+    Burak Özçivit is a leading Turkish actor, model, and producer. Rising to fame as Turkey’s Top Model in 2003 and later becoming the 2nd Best Model in the World, he soon transitioned to acting with breakout roles such as Kamran in Çalıkuşu, Kemal Soydere in Kara Sevda, and Osman in Kuruluş- Osman. Known for his charisma and versatility, he has won numerous awards and commands a massive fan base internationally. He also runs a successful production company and owns a chain of restaurants.
+  profile_summary: Award-winning Turkish actor and international heartthrob, lead star of Kuruluş- Osman.
+  instagram_handle: "@burakozcivit"
+  instagram_followers: 25000000
+  youtube_channel: ""
+  tiktok_handle: "@burakozcivit"
+  twitter_handle: "@burakozcivit"
+  brand_collaborations: >
+    - Altınyıldız Classics
+    - Pepsi
+    - Emaar Square Mall
+    - ClearMen
+    - Trem Global
+    - Tor Holding
+    - Singer Bangladesh
+    - J. Fragrances
+  media_appearances: >
+    - Cannes Film Festival
+    - Numerous Turkish TV award shows
+    - International press tours for Kuruluş- Osman and Kara Sevda
+  businesses: BRK’s Production (Film & TV production), Restaurant chain (Turkey)
+  hobbies: Traveling, Fishing, Football, Basketball, Fitness
+  estimated_net_worth: 10000000.00
+  assets: >
+    - Luxury cars
+    - Villa in Istanbul
+    - Investments in restaurants and production company
+  achievements: >
+    - Best Model of Turkey (2003, 2005)
+    - Lead roles in globally acclaimed TV series
+    - Multiple acting awards, including Golden Butterfly Awards
+    - Producer of hit Turkish films
+  public_perception: Admired across Turkey and worldwide for his talent, looks, and humble demeanor.
+  controversies: None major known
+  images:
+    - image_url: https://pbs.twimg.com/profile_images/1129270242017966080/kKaGbpC1_400x400.jpg
+      caption: Burak Özçivit at a press event
+      display_order: 1
+    - image_url: https://www.instagram.com/p/C5CxE3wKv8B/
+      caption: On set for Kuruluş- Osman
+      display_order: 2
+    - image_url: https://www.imdb.com/media/rm3970285056/tt11057344
+      caption: Promotional still from Kara Sevda
+      display_order: 3
+  videos:
+    - source: youtube
+      video_url: https://www.youtube.com/watch?v=wngCT2Tr6U8
+      caption: Burak Özçivit - Full Biography
+      display_order: 1
+    - source: youtube
+      video_url: https://www.youtube.com/watch?v=rqwFuKA072k
+      caption: Top Turkish Actors (Burak Featured)
+      display_order: 2
+    - source: instagram
+      video_url: https://www.instagram.com/reel/Ct9KH4hKl6N/
+      caption: Behind the scenes on set
+      display_order: 3
+  tweets:
+    - tweet_url: https://twitter.com/burakozcivit/status/1629363957213388806
+      caption: Thanks to fans for global support!
+      display_order: 1
+    - tweet_url: https://twitter.com/burakozcivit/status/1343834453024737281
+      caption: Excited for new season of Kuruluş- Osman
+      display_order: 2

@@ -83,6 +83,53 @@
         input[type="file"]:hover::before {
             background-color: #4338ca; /* indigo-700 */
         }
+        .formset-container {
+            border: 1px solid #e5e7eb; /* gray-200 */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            background-color: #f9fafb; /* gray-50 */
+        }
+        .formset-item {
+            border-bottom: 1px dashed #d1d5db; /* gray-300 */
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        .formset-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        .delete-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+        }
+        .delete-checkbox-wrapper label {
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+            color: #ef4444; /* red-500 */
+        }
+        .add-more-button {
+            display: block;
+            width: fit-content;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #22c55e; /* emerald-500 */
+            color: white;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .add-more-button:hover {
+            background-color: #16a34a; /* emerald-600 */
+        }
+        /* Hidden template for cloning */
+        .template-formset-item {
+            display: none; /* Crucial: Keep this hidden */
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -114,38 +161,312 @@
         <form class="mt-8 space-y-6" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="rounded-md shadow-sm -space-y-px">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Basic Profile Info</h3>
                 {% for field in form %}
+                    {% if field.name != 'profile_pic' and field.name != 'poster_pic' %}
+                        <div class="mb-4">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-red-500">*</span>
+                                {% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="formset-container">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Profile Pictures</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {# Profile Pic #}
                     <div class="mb-4">
-                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
-                            {{ field.label }}
-                            {% if field.field.required %}
+                        <label for="{{ form.profile_pic.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ form.profile_pic.label }}
+                            {% if form.profile_pic.field.required %}
                                 <span class="text-red-500">*</span>
                             {% endif %}
                         </label>
-                        {{ field }} {# This will now render file inputs for profile_pic and poster_pic #}
-                        {% if field.help_text %}
-                            <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+                        {{ form.profile_pic }}
+                        {% if form.profile_pic.help_text %}
+                            <p class="mt-1 text-xs text-gray-500">{{ form.profile_pic.help_text }}</p>
                         {% endif %}
-                        {% if field.errors %}
-                            {% for error in field.errors %}
+                        {% if form.profile_pic.errors %}
+                            {% for error in form.profile_pic.errors %}
                                 <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
                             {% endfor %}
                         {% endif %}
-                        
-                        {# Display current image if exists for file fields #}
-                        {% if field.name == 'profile_pic' or field.name == 'poster_pic' %}
-                            {% if field.value %} {# Check if a file is currently associated with the field #}
-                                <p class="mt-2 text-sm text-gray-600">
-                                    Current {{ field.label }}:
-                                    <img src="{{ field.value.url }}" alt="Current {{ field.label }}" class="inline-block h-16 w-16 object-cover rounded-md border border-gray-300 ml-2">
-                                    <a href="{{ field.value.url }}" target="_blank" class="text-blue-600 hover:underline text-sm ml-2">View</a>
-                                    {% if not field.field.required %}
-                                        <span class="text-gray-500 text-xs">(Upload a new file to replace, or leave blank to keep current)</span>
-                                    {% endif %}
-                                </p>
-                            {% endif %}
+                        {% if influencer.profile_pic %}
+                            <p class="mt-2 text-sm text-gray-600">
+                                Current Profile Picture:
+                                <img src="{{ influencer.profile_pic.url }}" alt="Current Profile Picture" class="inline-block h-16 w-16 object-cover rounded-md border border-gray-300 ml-2">
+                                <a href="{{ influencer.profile_pic.url }}" target="_blank" class="text-blue-600 hover:underline text-sm ml-2">View</a>
+                            </p>
                         {% endif %}
                     </div>
+                    
+                    {# Poster Pic #}
+                    <div class="mb-4">
+                        <label for="{{ form.poster_pic.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ form.poster_pic.label }}
+                            {% if form.poster_pic.field.required %}
+                                <span class="text-red-500">*</span>
+                            {% endif %}
+                        </label>
+                        {{ form.poster_pic }}
+                        {% if form.poster_pic.help_text %}
+                            <p class="mt-1 text-xs text-gray-500">{{ form.poster_pic.help_text }}</p>
+                        {% endif %}
+                        {% if form.poster_pic.errors %}
+                            {% for error in form.poster_pic.errors %}
+                                <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        {% if influencer.poster_pic %}
+                            <p class="mt-2 text-sm text-gray-600">
+                                Current Poster Picture:
+                                <img src="{{ influencer.poster_pic.url }}" alt="Current Poster Picture" class="inline-block h-16 w-16 object-cover rounded-md border border-gray-300 ml-2">
+                                <a href="{{ influencer.poster_pic.url }}" target="_blank" class="text-blue-600 hover:underline text-sm ml-2">View</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# --- Influencer Images Formset --- #}
+            <div class="formset-container">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Image Gallery Links (Max 6)</h3>
+                {{ image_formset.management_form }}
+                <div id="image-formset-container">
+                    {% for form in image_formset %}
+                        <div class="formset-item bg-white p-4 rounded-md shadow-sm mb-4">
+                            {% if form.instance.pk %}<p class="text-sm text-gray-500 mb-2">Existing Image Link:</p>{% endif %}
+                            {# Render all hidden fields associated with this form (e.g., id) #}
+                            {% for hidden_field in form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+                            {# Render visible fields #}
+                            {% for field in form %}
+                                {% if not field.is_hidden and field.name != 'DELETE' %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                            {{ field.label }}
+                                            {% if field.field.required %}
+                                                <span class="text-red-500">*</span>
+                                            {% endif %}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            {% for error in field.errors %}
+                                                <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if form.instance.pk %} {# Only show delete checkbox for existing forms #}
+                                <div class="delete-checkbox-wrapper">
+                                    {{ form.DELETE }}
+                                    <label for="{{ form.DELETE.id_for_label }}">Delete Image</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="add-more-button" id="add-image-form">Add Another Image Link</button>
+                {% if image_formset.non_form_errors %}
+                    {% for error in image_formset.non_form_errors %}
+                        <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {# Hidden Image Form Template - for JavaScript cloning #}
+            <div id="empty-image-form-template" class="template-formset-item bg-white p-4 rounded-md shadow-sm mb-4">
+                <p class="text-sm text-gray-500 mb-2">New Image Link:</p>
+                {# Render all hidden fields for the empty form #}
+                {% for hidden_field in image_formset.empty_form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+                {% for field in image_formset.empty_form %}
+                    {# Exclude visible fields that are not part of the standard form inputs #}
+                    {% if not field.is_hidden and field.name != 'DELETE' %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-red-500">*</span>
+                                {% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {# --- Influencer Videos Formset --- #}
+            <div class="formset-container">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Video Links (Max 6)</h3>
+                {{ video_formset.management_form }}
+                <div id="video-formset-container">
+                    {% for form in video_formset %}
+                        <div class="formset-item bg-white p-4 rounded-md shadow-sm mb-4">
+                            {% if form.instance.pk %}<p class="text-sm text-gray-500 mb-2">Existing Video Link:</p>{% endif %}
+                            {# Render all hidden fields associated with this form (e.g., id) #}
+                            {% for hidden_field in form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+                            {% for field in form %}
+                                {# Exclude hidden fields and the DELETE checkbox itself from this inner loop #}
+                                {% if not field.is_hidden and field.name != 'DELETE' %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                            {{ field.label }}
+                                            {% if field.field.required %}
+                                                <span class="text-red-500">*</span>
+                                            {% endif %}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            {% for error in field.errors %}
+                                                <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if form.instance.pk %}
+                                <div class="delete-checkbox-wrapper">
+                                    {{ form.DELETE }}
+                                    <label for="{{ form.DELETE.id_for_label }}">Delete Video</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="add-more-button" id="add-video-form">Add Another Video Link</button>
+                {% if video_formset.non_form_errors %}
+                    {% for error in video_formset.non_form_errors %}
+                        <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {# Hidden Video Form Template - for JavaScript cloning #}
+            <div id="empty-video-form-template" class="template-formset-item bg-white p-4 rounded-md shadow-sm mb-4">
+                <p class="text-sm text-gray-500 mb-2">New Video Link:</p>
+                {# Render all hidden fields for the empty form #}
+                {% for hidden_field in video_formset.empty_form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+                {% for field in video_formset.empty_form %}
+                    {# Exclude visible fields that are not part of the standard form inputs #}
+                    {% if not field.is_hidden and field.name != 'DELETE' %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-red-500">*</span>
+                                {% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {# --- Influencer Tweets Formset --- #}
+            <div class="formset-container">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Tweet Links (Max 6)</h3>
+                {{ tweet_formset.management_form }}
+                <div id="tweet-formset-container">
+                    {% for form in tweet_formset %}
+                        <div class="formset-item bg-white p-4 rounded-md shadow-sm mb-4">
+                            {% if form.instance.pk %}<p class="text-sm text-gray-500 mb-2">Existing Tweet Link:</p>{% endif %}
+                            {# Render all hidden fields associated with this form (e.g., id) #}
+                            {% for hidden_field in form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+                            {% for field in form %}
+                                {# Exclude hidden fields and the DELETE checkbox itself from this inner loop #}
+                                {% if not field.is_hidden and field.name != 'DELETE' %}
+                                    <div class="mb-3">
+                                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                            {{ field.label }}
+                                            {% if field.field.required %}
+                                                <span class="text-red-500">*</span>
+                                            {% endif %}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            {% for error in field.errors %}
+                                                <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if form.instance.pk %}
+                                <div class="delete-checkbox-wrapper">
+                                    {{ form.DELETE }}
+                                    <label for="{{ form.DELETE.id_for_label }}">Delete Tweet</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="add-more-button" id="add-tweet-form">Add Another Tweet Link</button>
+                {% if tweet_formset.non_form_errors %}
+                    {% for error in tweet_formset.non_form_errors %}
+                        <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {# Hidden Tweet Form Template - for JavaScript cloning #}
+            <div id="empty-tweet-form-template" class="template-formset-item bg-white p-4 rounded-md shadow-sm mb-4">
+                <p class="text-sm text-gray-500 mb-2">New Tweet Link:</p>
+                {# Render all hidden fields for the empty form #}
+                {% for hidden_field in tweet_formset.empty_form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+                {% for field in tweet_formset.empty_form %}
+                    {# Exclude visible fields that are not part of the standard form inputs #}
+                    {% if not field.is_hidden and field.name != 'DELETE' %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-red-500">*</span>
+                                {% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
 
@@ -157,5 +478,68 @@
             </div>
         </form>
     </div>
+
+    {# JavaScript for adding new formset forms dynamically #}
+    <script>
+        function setupFormset(containerId, addBtnId, emptyFormTemplateId, totalFormsInput) {
+            const container = document.getElementById(containerId);
+            const addBtn = document.getElementById(addBtnId);
+            const emptyFormTemplate = document.getElementById(emptyFormTemplateId); // Get the template div
+            let totalForms = parseInt(totalFormsInput.value);
+            const maxForms = parseInt(container.parentNode.querySelector('input[name$="-MAX_NUM_FORMS"]').value);
+
+            addBtn.addEventListener('click', () => {
+                if (totalForms < maxForms) {
+                    const newForm = emptyFormTemplate.cloneNode(true); // Clone the template
+                    newForm.id = ''; // Remove the ID from the cloned element
+                    newForm.innerHTML = newForm.innerHTML.replace(/__prefix__/g, totalForms);
+                    newForm.style.display = 'block'; // Ensure it's visible
+                    
+                    // Clear input values for new form
+                    newForm.querySelectorAll('input, textarea, select').forEach(input => {
+                        if (input.type !== 'hidden' && input.type !== 'checkbox') {
+                            input.value = '';
+                        }
+                        if (input.type === 'checkbox') {
+                            input.checked = false;
+                        }
+                        if (input.tagName === 'SELECT') {
+                            input.selectedIndex = -1; // Deselect any default option
+                        }
+                    });
+
+                    // Update IDs and 'for' attributes for newly cloned form fields
+                    newForm.querySelectorAll('[id^="id_"], [for^="id_"]').forEach(element => {
+                        const oldId = element.id || element.getAttribute('for');
+                        if (oldId) {
+                            const newId = oldId.replace(/__prefix__/, totalForms);
+                            if (element.id) element.id = newId;
+                            if (element.tagName === 'LABEL') element.setAttribute('for', newId);
+                        }
+                    });
+
+                    container.appendChild(newForm);
+                    totalForms++;
+                    totalFormsInput.value = totalForms;
+                } else {
+                    alert(`You can only add a maximum of ${maxForms} items.`);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup for Image Formset
+            const totalImageForms = document.querySelector('input[name="images-TOTAL_FORMS"]');
+            setupFormset('image-formset-container', 'add-image-form', 'empty-image-form-template', totalImageForms);
+
+            // Setup for Video Formset
+            const totalVideoForms = document.querySelector('input[name="videos-TOTAL_FORMS"]');
+            setupFormset('video-formset-container', 'add-video-form', 'empty-video-form-template', totalVideoForms);
+
+            // Setup for Tweet Formset
+            const totalTweetForms = document.querySelector('input[name="tweets-TOTAL_FORMS"]');
+            setupFormset('tweet-formset-container', 'add-tweet-form', 'empty-tweet-form-template', totalTweetForms);
+        });
+    </script>
 </body>
 </html>

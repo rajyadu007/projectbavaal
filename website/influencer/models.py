@@ -7,6 +7,7 @@ import os # Import the os module
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 import datetime # Import datetime for age calculation
+from django.core.exceptions import ValidationError # Import ValidationError
 
 
 class Category(models.Model):
@@ -149,6 +150,14 @@ class InfluencerImage(models.Model):
     caption = models.CharField(max_length=255, blank=True, null=True)
     display_order = models.PositiveIntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        # Enforce limit of 6 images per influencer when creating new ones
+        if not self.pk: # This is a new object being created
+            if self.influencer.images.count() >= 6:
+                raise ValidationError("An influencer cannot have more than 6 images.")
+        super().save(*args, **kwargs)
+
+
     def __str__(self):
         return f"Image for {self.influencer.name}"
 
@@ -163,6 +172,13 @@ class InfluencerVideo(models.Model):
     video_url = models.URLField(help_text="YouTube or Instagram video link")
     caption = models.CharField(max_length=255, blank=True, null=True)
     display_order = models.PositiveIntegerField(default=0)
+    
+    def save(self, *args, **kwargs):
+        # Enforce limit of 3 videos per influencer when creating new ones
+        if not self.pk: # This is a new object being created
+            if self.influencer.videos.count() >= 3:
+                raise ValidationError("An influencer cannot have more than 3 videos.")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.source.capitalize()} video for {self.influencer.name}"
@@ -173,6 +189,13 @@ class InfluencerTweet(models.Model):
     tweet_url = models.URLField(help_text="Full Twitter/X post link")
     caption = models.CharField(max_length=255, blank=True, null=True)
     display_order = models.PositiveIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        # Enforce limit of 4 tweets per influencer when creating new ones
+        if not self.pk: # This is a new object being created
+            if self.influencer.tweets.count() >= 4:
+                raise ValidationError("An influencer cannot have more than 4 tweets.")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Tweet for {self.influencer.name}"

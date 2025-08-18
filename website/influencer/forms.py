@@ -2,8 +2,9 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import inlineformset_factory 
 from django.utils.text import slugify
-from .models import Influencer, Category
+from .models import Influencer, Category, InfluencerTweet, InfluencerImage, InfluencerVideo
 
 class InfluencerProfileForm(forms.ModelForm):
     """
@@ -105,4 +106,72 @@ class InfluencerProfileForm(forms.ModelForm):
             instance.save()
             self.save_m2m() # Crucial for ManyToMany fields like 'categories'
         return instance
+
+
+# --- Forms for related models ---
+class InfluencerImageForm(forms.ModelForm):
+    class Meta:
+        model = InfluencerImage
+        fields = ['image_url', 'caption', 'display_order']
+        widgets = {
+            'image_url': forms.URLInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'}),
+            'caption': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'}),
+            'display_order': forms.NumberInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'})
+        }
+    
+    # IMPORTANT: Make fields not required at the form level
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['image_url'].required = False
+        self.fields['caption'].required = False
+        # display_order is PositiveIntegerField with default=0, it's not truly optional if 0 is considered a value.
+        # If display_order should also be completely optional, you'd need to adjust its model definition as well.
+
+
+class InfluencerVideoForm(forms.ModelForm):
+    class Meta:
+        model = InfluencerVideo
+        fields = ['source', 'video_url', 'caption', 'display_order']
+        widgets = {
+            'source': forms.Select(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'}),
+            'video_url': forms.URLInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'}),
+            'caption': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'}),
+            'display_order': forms.NumberInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'})
+        }
+
+    # IMPORTANT: Make fields not required at the form level
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['source'].required = False
+        self.fields['video_url'].required = False
+        self.fields['caption'].required = False
+
+
+class InfluencerTweetForm(forms.ModelForm):
+    class Meta:
+        model = InfluencerTweet
+        fields = ['tweet_url', 'caption', 'display_order']
+        widgets = {
+            'tweet_url': forms.URLInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'}),
+            'caption': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'}),
+            'display_order': forms.NumberInput(attrs={'class': 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300'})
+        }
+
+    # IMPORTANT: Make fields not required at the form level
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tweet_url'].required = False
+        self.fields['caption'].required = False
+
+
+# --- Formsets ---
+# max_num=6 enforces the limit you requested.
+# extra=1 means one empty form is shown initially for adding new items.
+# can_delete=True adds a checkbox to delete existing items.
+InfluencerImageFormSet = inlineformset_factory(Influencer, InfluencerImage, 
+                                            form=InfluencerImageForm, extra=0, max_num=6, can_delete=True)
+InfluencerVideoFormSet = inlineformset_factory(Influencer, InfluencerVideo, 
+                                            form=InfluencerVideoForm, extra=0, max_num=3, can_delete=True)
+InfluencerTweetFormSet = inlineformset_factory(Influencer, InfluencerTweet, 
+                                            form=InfluencerTweetForm, extra=0, max_num=4, can_delete=True)
 

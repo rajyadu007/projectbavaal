@@ -9,38 +9,61 @@ from django.core.files import File # For saving files from URLs
 import requests # For making HTTP requests to fetch images
 import os
 from io import BytesIO # To handle image data in memory
-
-from .forms import InfluencerProfileForm
 from .models import Influencer
+from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
+from .forms import (
+    InfluencerProfileForm,
+    InfluencerImageFormSet, # Import the formsets
+    InfluencerVideoFormSet,
+    InfluencerTweetFormSet,
+)
+
+@login_required
 def create_or_update_influencer_profile(request, slug=None):
-    """
-    View to create a new influencer profile or update an existing one.
-    Handles all text-based data and direct file uploads for profile_pic and poster_pic.
-    """
     influencer = None
     if slug:
         influencer = get_object_or_404(Influencer, slug=slug)
 
     if request.method == 'POST':
-        # When handling file uploads, always pass request.FILES to the form
         form = InfluencerProfileForm(request.POST, request.FILES, instance=influencer)
-        if form.is_valid():
-            # ModelForm handles saving the file fields automatically when form.save() is called
-            influencer_instance = form.save()
-            messages.success(request, "Influencer profile saved successfully!")
-            return redirect('profile_detail', slug=influencer_instance.slug) # Use 'profile_detail' as per your project urls
+        image_formset = InfluencerImageFormSet(request.POST, request.FILES, instance=influencer, prefix='images')
+        video_formset = InfluencerVideoFormSet(request.POST, request.FILES, instance=influencer, prefix='videos')
+        tweet_formset = InfluencerTweetFormSet(request.POST, request.FILES, instance=influencer, prefix='tweets')
+
+        if form.is_valid() and image_formset.is_valid() and video_formset.is_valid() and tweet_formset.is_valid():
+            try:
+                with transaction.atomic():
+                    influencer_instance = form.save()
+                    image_formset.instance = influencer_instance
+                    video_formset.instance = influencer_instance
+                    tweet_formset.instance = influencer_instance
+
+                    image_formset.save()
+                    video_formset.save()
+                    tweet_formset.save()
+
+                messages.success(request, "Influencer profile and related links saved successfully!")
+                return redirect('profile_detail', slug=influencer_instance.slug)
+            except Exception as e:
+                messages.error(request, f"An error occurred while saving: {e}")
         else:
-            messages.error(request, "Please correct the errors below.")
+           messages.error(request, "Please correct the errors below.")
     else:
-        # For GET request, create an empty form or pre-fill it for update
         form = InfluencerProfileForm(instance=influencer)
+        image_formset = InfluencerImageFormSet(instance=influencer, prefix='images')
+        video_formset = InfluencerVideoFormSet(instance=influencer, prefix='videos')
+        tweet_formset = InfluencerTweetFormSet(instance=influencer, prefix='tweets')
 
     context = {
         'form': form,
+        'image_formset': image_formset,
+        'video_formset': video_formset,
+        'tweet_formset': tweet_formset,
         'influencer': influencer,
         'page_title': "Create Influencer Profile" if not influencer else f"Edit {influencer.name}'s Profile",
-        'form_description': "Fill out the influencer's details and upload profile and poster pictures.",
+        'form_description': "Fill out the influencer's details and manage their images, videos, and tweets.",
     }
     return render(request, 'influencer/influencer_profile_form.html', context)
 
