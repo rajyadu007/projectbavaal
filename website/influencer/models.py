@@ -1,12 +1,13 @@
-# your_app_name/models.py
-
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
-from django.urls import reverse 
+from django.urls import reverse
 import uuid
+import os # Import the os module
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+import datetime # Import datetime for age calculation
+
 
 class Category(models.Model):
     """
@@ -43,7 +44,6 @@ class Influencer(models.Model):
     nickname = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     place_of_birth = models.CharField(max_length=255, blank=True, null=True)
-    age = models.PositiveIntegerField(blank=True, null=True)
     height_cm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     hair_color = models.CharField(max_length=50, blank=True, null=True)
     eye_color = models.CharField(max_length=50, blank=True, null=True)
@@ -82,11 +82,19 @@ class Influencer(models.Model):
     public_perception = models.TextField(blank=True, null=True)
     controversies = models.TextField(blank=True, null=True)
 
+    # Relationships
+    categories = models.ManyToManyField(Category, related_name='influencers', blank=True,
+                                        help_text="Select categories this influencer specializes in.")
+
     # Metadata
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Removed _old_profile_pic and _old_poster_pic attributes
+    # and __init__ method as we will fetch the old instance directly in save()
+
     def save(self, *args, **kwargs):
+        # Handle slug generation if not already set
         if not self.slug:
             base_slug = slugify(self.name)
             unique_slug = base_slug
@@ -95,10 +103,42 @@ class Influencer(models.Model):
                 unique_slug = f"{base_slug}-{num}"
                 num += 1
             self.slug = unique_slug
-        super().save(*args, **kwargs)
+        
+        # --- File Cleanup Logic for Replacements ---
+        if self.pk: # Only if it's an existing object being updated
+            try:
+                # Get the existing instance from the database BEFORE saving the new data
+                # This old_instance still holds references to the old file paths
+                old_instance = Influencer.objects.get(pk=self.pk)
+
+                # Check if profile_pic has changed
+                if old_instance.profile_pic and self.profile_pic.name != old_instance.profile_pic.name:
+                    # Delete the old file using its FieldFile object
+                    old_instance.profile_pic.delete(save=False) # save=False prevents an extra save operation
+
+                # Check if poster_pic has changed
+                if old_instance.poster_pic and self.poster_pic.name != old_instance.poster_pic.name:
+                    # Delete the old file using its FieldFile object
+                    old_instance.poster_pic.delete(save=False)
+
+            except Influencer.DoesNotExist:
+                # This should ideally not happen if self.pk exists, but good for robustness
+                pass
+
+        super().save(*args, **kwargs) # Save the current instance with its new (or kept) files
+
+    @property
+    def age(self):
+        """Calculates the current age based on date_of_birth."""
+        if self.date_of_birth:
+            today = datetime.date.today()
+            age_calc = today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+            return age_calc
+        return None
 
     def __str__(self):
         return self.name
+
 
 
 # ---- Related Models for Media ---- #
@@ -141,18 +181,18 @@ class InfluencerTweet(models.Model):
 # File Cleanup Signals
 # ------------------------------
 
-def delete_file_if_exists(file_field):
-    """Helper to delete file from storage."""
-    if file_field and file_field.name and file_field.storage.exists(file_field.name):
-        file_field.delete(save=False)
+# This helper is now specifically for FieldFile instances
+def delete_file_if_exists(field_file_instance):
+    """Helper to delete a FieldFile from storage."""
+    # Check if the field_file_instance actually refers to a file that exists
+    # and if its name is not empty (i.e., it's not a dummy file object)
+    if field_file_instance and field_file_instance.name and field_file_instance.storage.exists(field_file_instance.name):
+        field_file_instance.delete(save=False) # delete() method handles the storage interaction
 
 
 @receiver(post_delete, sender=Influencer)
-def delete_influencer_main_images(sender, instance, **kwargs):
+def delete_influencer_main_images_on_object_deletion(sender, instance, **kwargs):
+    """Deletes profile and poster pics when an Influencer object is deleted."""
+    # Pass the actual FieldFile objects to the helper
     delete_file_if_exists(instance.profile_pic)
     delete_file_if_exists(instance.poster_pic)
-
-
-@receiver(post_delete, sender=InfluencerImage)
-def delete_related_image_file(sender, instance, **kwargs):
-    delete_file_if_exists(instance.image)

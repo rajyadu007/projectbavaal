@@ -3,7 +3,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.contrib.sitemaps.views import sitemap
-from influencer.views import yaml_upload_view
 from . import sitemaps as sm 
 from . import views 
 from influencer.views import profile_detail
@@ -39,6 +38,8 @@ urlpatterns = [
     path('sitemap_index.xml', views.custom_sitemap_index, name='custom_sitemap_index'), # Pass sitemaps to your custom index
     path('<section>-sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
+    path('influencer/', include('influencer.urls')),
+    
     # IMPORTANT: The root URL should point to ONE primary app.
     # Typically, your 'blog' app might handle the root.
     path('about/', views.about_page, name='about'),
@@ -47,7 +48,6 @@ urlpatterns = [
     path('privacy-policy/', views.policy_page, name='privacy-policy'),
     path('terms-and-conditions/', views.terms_page, name='terms-and-conditions'),
     path('apps/', include('bavaalapps.urls')),
-    path("yaml-upload/", yaml_upload_view, name="yaml_upload"),
     path('', include('blog.urls')), # This should be the last 'include' for the root, or place specific paths above it.
 ]
 

@@ -1,0 +1,161 @@
+<!-- your_app_name/templates/your_app_name/influencer_profile_form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        /* Custom styling for Django form fields */
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border-width: 1px;
+            border-color: #d1d5db; /* gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+            color: #1f2937; /* gray-900 */
+            background-color: #ffffff; /* white */
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="url"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #4f46e5; /* indigo-500 */
+            ring: 2px;
+            ring-color: #a5b4fc; /* indigo-200 */
+        }
+        /* Style for multiple select (categories) */
+        select[multiple] {
+            min-height: 100px; /* Adjust as needed */
+        }
+        /* Special styling for file inputs */
+        input[type="file"] {
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            background-color: #f9fafb; /* gray-50 */
+            cursor: pointer;
+        }
+        input[type="file"]:hover {
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        input[type="file"]::-webkit-file-upload-button {
+            visibility: hidden; /* Hide default button */
+            width: 0; /* Make it disappear */
+            padding: 0; /* Remove padding */
+        }
+        input[type="file"]::before {
+            content: 'Choose File'; /* Custom button text */
+            display: inline-block;
+            background: #4f46e5; /* indigo-600 */
+            color: white;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            outline: none;
+            white-space: nowrap;
+            -webkit-user-select: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        input[type="file"]:hover::before {
+            background-color: #4338ca; /* indigo-700 */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl w-full bg-white p-8 rounded-lg shadow-xl space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                {{ page_title }}
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                {{ form_description }}
+            </p>
+        </div>
+
+        <!-- Messages Section -->
+        {% if messages %}
+            <ul class="list-none p-0 space-y-2">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }} p-3 rounded-md text-sm {% endif %}"
+                        {% if 'success' in message.tags %}style="background-color: #d1fae5; color: #065f46;"
+                        {% elif 'error' in message.tags %}style="background-color: #fee2e2; color: #991b1b;"
+                        {% elif 'info' in message.tags %}style="background-color: #e0f2fe; color: #0c4a6e;"
+                        {% elif 'warning' in message.tags %}style="background-color: #fffbeb; color: #92400e;"{% endif %}>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form class="mt-8 space-y-6" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="rounded-md shadow-sm -space-y-px">
+                {% for field in form %}
+                    <div class="mb-4">
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span class="text-red-500">*</span>
+                            {% endif %}
+                        </label>
+                        {{ field }} {# This will now render file inputs for profile_pic and poster_pic #}
+                        {% if field.help_text %}
+                            <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+                        {% endif %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {# Display current image if exists for file fields #}
+                        {% if field.name == 'profile_pic' or field.name == 'poster_pic' %}
+                            {% if field.value %} {# Check if a file is currently associated with the field #}
+                                <p class="mt-2 text-sm text-gray-600">
+                                    Current {{ field.label }}:
+                                    <img src="{{ field.value.url }}" alt="Current {{ field.label }}" class="inline-block h-16 w-16 object-cover rounded-md border border-gray-300 ml-2">
+                                    <a href="{{ field.value.url }}" target="_blank" class="text-blue-600 hover:underline text-sm ml-2">View</a>
+                                    {% if not field.field.required %}
+                                        <span class="text-gray-500 text-xs">(Upload a new file to replace, or leave blank to keep current)</span>
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div>
+                <button type="submit"
+                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                    Save Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

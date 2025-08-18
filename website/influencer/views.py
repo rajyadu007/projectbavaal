@@ -1,38 +1,63 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib import messages
-import os
-import subprocess
 from django.conf import settings
 from .models import Influencer, Category
 from django.core.management import call_command
+from django.urls import reverse
+from django.contrib import messages # Import messages framework
+from django.core.files import File # For saving files from URLs
+import requests # For making HTTP requests to fetch images
+import os
+from io import BytesIO # To handle image data in memory
 
-YAML_FILE_PATH = os.path.join(settings.BASE_DIR, "influencer_data.yaml")
+from .forms import InfluencerProfileForm
+from .models import Influencer
 
-def yaml_upload_view(request):
-    if request.method == "POST":
-        yaml_data = request.POST.get("yaml_content")
-        with open(YAML_FILE_PATH, "w", encoding="utf-8") as f:
-            f.write(yaml_data)
+def create_or_update_influencer_profile(request, slug=None):
+    """
+    View to create a new influencer profile or update an existing one.
+    Handles all text-based data and direct file uploads for profile_pic and poster_pic.
+    """
+    influencer = None
+    if slug:
+        influencer = get_object_or_404(Influencer, slug=slug)
 
-        # ✅ Run the management command directly inside Django
-        try:
-            call_command("fill_dummy_influencer", YAML_FILE_PATH)
-            messages.success(request, "Influencer data saved and published!")
-        except Exception as e:
-            messages.error(request, f"Error running command: {e}")
+    if request.method == 'POST':
+        # When handling file uploads, always pass request.FILES to the form
+        form = InfluencerProfileForm(request.POST, request.FILES, instance=influencer)
+        if form.is_valid():
+            # ModelForm handles saving the file fields automatically when form.save() is called
+            influencer_instance = form.save()
+            messages.success(request, "Influencer profile saved successfully!")
+            return redirect('profile_detail', slug=influencer_instance.slug) # Use 'profile_detail' as per your project urls
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        # For GET request, create an empty form or pre-fill it for update
+        form = InfluencerProfileForm(instance=influencer)
 
-        return redirect("yaml_upload")
+    context = {
+        'form': form,
+        'influencer': influencer,
+        'page_title': "Create Influencer Profile" if not influencer else f"Edit {influencer.name}'s Profile",
+        'form_description': "Fill out the influencer's details and upload profile and poster pictures.",
+    }
+    return render(request, 'influencer/influencer_profile_form.html', context)
 
-    # If file exists, load it
-    yaml_content = ""
-    if os.path.exists(YAML_FILE_PATH):
-        with open(YAML_FILE_PATH, "r", encoding="utf-8") as f:
-            yaml_content = f.read()
 
-    return render(request, "influencer/yaml_upload.html", {
-        "yaml_content": yaml_content
-    })
+def influencer_detail(request, slug):
+    """
+    A simple view to display influencer details.
+    """
+    influencer = get_object_or_404(Influencer, slug=slug)
+    context = {
+        'influencer': influencer,
+        'page_title': f"{influencer.name}'s Profile",
+    }
+    return render(request, 'influencer/influencer_detail.html', context)
+
+
+
 
 def profile_detail(request, slug): # Changed from pk to slug
     """
