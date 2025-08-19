@@ -1,78 +1,73 @@
-# A list of influencer profiles
-- name: Burak Özçivit
-  profile_pic: /static/images/burak_ozcivit_profile.png
-  poster_pic: /static/images/burak_ozcivit_poster.png
-  full_name: Burak Özçivit
-  nickname: Burak
-  date_of_birth: 1984-12-24
-  place_of_birth: Istanbul, Turkey
-  height_cm: 184
-  hair_color: Black
-  eye_color: Brown
-  education: Bachelor of Arts, Marmara University, Faculty of Fine Arts (Photography)
-  profession: Actor, Model, Producer
+- name: Hande Erçel
+  full_name: Hande Erçel
+  nickname: Hande, Miss Turkey (by fans)
+  date_of_birth: 1993-11-24
+  place_of_birth: Bandırma, Balıkesir Province, Turkey
+  height_cm: 175
+  hair_color: Brown
+  eye_color: Hazel
+  education: Fine Arts, Mimar Sinan Fine Arts University (Department of Traditional Turkish Arts)
+  profession: Actress, Model, Digital Creator
   biography: >
-    Burak Özçivit is a leading Turkish actor, model, and producer. Rising to fame as Turkey’s Top Model in 2003 and later becoming the 2nd Best Model in the World, he soon transitioned to acting with breakout roles such as Kamran in Çalıkuşu, Kemal Soydere in Kara Sevda, and Osman in Kuruluş- Osman. Known for his charisma and versatility, he has won numerous awards and commands a massive fan base internationally. He also runs a successful production company and owns a chain of restaurants.
-  profile_summary: Award-winning Turkish actor and international heartthrob, lead star of Kuruluş- Osman.
-  instagram_handle: "@burakozcivit"
-  instagram_followers: 25000000
+    Hande Erçel is one of Turkey's most beloved and internationally recognized actresses and influencers. Rising to fame with her charismatic screen presence, Hande's journey began in modeling, after which she secured the title of Miss Turkey in 2012. Her acting career blossomed with lead roles in hit romantic dramas—most notably as Hayat Uzun in “Aşk Laftan Anlamaz” and Eda Yıldız in the global phenomenon “Sen Çal Kapımı” (You Knock On My Door). With over 31 million Instagram followers, she’s not only a social media powerhouse but an aspirational role model for young women, celebrated for her natural beauty, elegant style, philanthropy, and warm personality. Hande frequently collaborates with both Turkish and international brands, and her fashion sense and engaging content consistently trend across platforms.
+  profile_summary: Turkey’s top female influencer, award-winning TV actress, and global style icon with unmatched digital reach.
+  instagram_handle: "handemiyy"
+  instagram_followers: 31800000
   youtube_channel: ""
-  tiktok_handle: "@burakozcivit"
-  twitter_handle: "@burakozcivit"
+  tiktok_handle: "handemiyy"
+  twitter_handle: "HandeErcel"
   brand_collaborations: >
-    - Altınyıldız Classics
-    - Pepsi
-    - Emaar Square Mall
-    - ClearMen
-    - Trem Global
-    - Tor Holding
-    - Singer Bangladesh
-    - J. Fragrances
+    - L’Oreal Paris
+    - Nocturne
+    - DeFacto
+    - Atasay Jewelry
+    - Signal Türkiye
+    - Disney+
+    - Magnum
+    - Pantene
+    - Defacto
+    - Levi’s
   media_appearances: >
     - Cannes Film Festival
-    - Numerous Turkish TV award shows
-    - International press tours for Kuruluş- Osman and Kara Sevda
-  businesses: BRK’s Production (Film & TV production), Restaurant chain (Turkey)
-  hobbies: Traveling, Fishing, Football, Basketball, Fitness
-  estimated_net_worth: 10000000.00
+    - Vogue Turkey cover stories
+    - Elle Style Awards
+    - GQ Men of the Year Awards
+    - Numerous Turkish entertainment programs and international press features
+  businesses: Select ambassadorships and fashion lines (collaborative collections)
+  hobbies: Painting, traveling, animal welfare, photography, fitness, reading
+  estimated_net_worth: 6000000.00
   assets: >
-    - Luxury cars
-    - Villa in Istanbul
-    - Investments in restaurants and production company
+    - Istanbul apartment
+    - Investments in fashion and beauty ventures
+    - Luxury car(s)
   achievements: >
-    - Best Model of Turkey (2003, 2005)
-    - Lead roles in globally acclaimed TV series
-    - Multiple acting awards, including Golden Butterfly Awards
-    - Producer of hit Turkish films
-  public_perception: Admired across Turkey and worldwide for his talent, looks, and humble demeanor.
-  controversies: None major known
+    - Miss Turkey 2012
+    - Golden Butterfly Award for Best Actress
+    - Multiple “Most Loved Actress” awards
+    - Globally renowned for lead roles in “Sen Çal Kapımı” and “Aşk Laftan Anlamaz”
+    - Among the most-followed Turkish celebrities on Instagram
+  public_perception: Universally admired for her approachable charm, timeless beauty, professionalism, and positive influence both on and off the screen.
+  controversies: None major; widely seen as a positive, controversy-free public figure.
   images:
-    - image_url: https://pbs.twimg.com/profile_images/1129270242017966080/kKaGbpC1_400x400.jpg
-      caption: Burak Özçivit at a press event
+    - image_url: https://pbs.twimg.com/media/Fdo2sLWWYAETZQi?format=jpg&name=small
+      caption: Hande Erçel at an international event
       display_order: 1
-    - image_url: https://www.instagram.com/p/C5CxE3wKv8B/
-      caption: On set for Kuruluş- Osman
+    - image_url: https://www.instagram.com/p/CqdC9YjsvEX/media/?size=l
+      caption: Hande for Nocturne fashion campaign
       display_order: 2
-    - image_url: https://www.imdb.com/media/rm3970285056/tt11057344
-      caption: Promotional still from Kara Sevda
+    - image_url: https://www.glamofgirls.com/wp-content/uploads/2023/11/hande-ercel-instagram.jpg
+      caption: Candid Instagram moment
       display_order: 3
   videos:
     - source: youtube
-      video_url: https://www.youtube.com/watch?v=wngCT2Tr6U8
-      caption: Burak Özçivit - Full Biography
+      video_url: https://www.youtube.com/watch?v=Rl7gQOlImV4
+      caption: The Life Story of Hande Erçel
       display_order: 1
     - source: youtube
-      video_url: https://www.youtube.com/watch?v=rqwFuKA072k
-      caption: Top Turkish Actors (Burak Featured)
+      video_url: https://www.youtube.com/watch?v=S5ha_MiqVJs
+      caption: Best Moments of Hande Erçel from “Sen Çal Kapımı”
       display_order: 2
     - source: instagram
-      video_url: https://www.instagram.com/reel/Ct9KH4hKl6N/
-      caption: Behind the scenes on set
+      video_url: https://www.instagram.com/reel/CrpoyiyDNAg/
+      caption: Behind-the-scenes with Hande Erçel for L’Oreal
       display_order: 3
-  tweets:
-    - tweet_url: https://twitter.com/burakozcivit/status/1629363957213388806
-      caption: Thanks to fans for global support!
-      display_order: 1
-    - tweet_url: https://twitter.com/burakozcivit/status/1343834453024737281
-      caption: Excited for new season of Kuruluş- Osman
-      display_order: 2

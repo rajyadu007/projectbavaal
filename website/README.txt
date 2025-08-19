@@ -8,6 +8,9 @@ npm init -y
 # to build new style.css
 npm run watch:tailwind
 
+
+python manage.py populate_influencer influencer_data.yaml
+
 Update an existing influencer by slug (recommended)
 python manage.py fetch_influencer_data --slug pooja-janrao --ig "@pooja_janrao_official" --yt https://www.youtube.com/@OfficialPoojajanrao --tw "@PoojaJanrao"
 

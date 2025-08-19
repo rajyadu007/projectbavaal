@@ -388,25 +388,6 @@
             </div>
             {% endif %}
             
-            {# Tweets #}
-            {% if influencer.tweets.all %}
-            <div>
-                <h3 class="text-xl font-semibold mb-4 text-primary-light">Tweets</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {% for tweet in influencer.tweets.all %}
-                    <div class="tweet-item rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-light p-4">
-                        <blockquote class="twitter-tweet" data-lang="en">
-                            <a href="{{ tweet.tweet_url }}"></a>
-                        </blockquote>
-                        {# Twitter widget script is already loaded once at the end of the block, which is good. #}
-                        {% if tweet.caption %}
-                        <p class="text-sm text-text mt-2">{{ tweet.caption }}</p>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
         </div>
         {% endif %}
 
@@ -435,6 +416,4 @@
     {# GLOBAL JAVASCRIPT FOR EMBEDS - Loaded once at the end of the content block #}
     {# Instagram embed script #}
     <script async src="//www.instagram.com/embed.js"></script>
-    {# Twitter widget script (already here, good!) #}
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endblock %}
