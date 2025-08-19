@@ -1,0 +1,42 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block title %}Confirm Email Address{% endblock %}
+{% block heading %}Confirm Email Address{% endblock %}
+
+{% block content %}
+{% if confirmation %}
+    <div class="text-center space-y-4">
+        <p class="text-gray-600">
+            {% blocktrans with confirmation.email_address.email as email %}
+            Please confirm that <a href="mailto:{{ email }}" class="text-green-600">{{ email }}</a> is your email address.
+            {% endblocktrans %}
+        </p>
+
+        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+            {% csrf_token %}
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+                {% trans "Confirm" %}
+            </button>
+        </form>
+    </div>
+{% else %}
+    <div class="text-center space-y-4">
+        <div class="text-red-600 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </div>
+        
+        <p class="text-gray-600">
+            {% trans "This email confirmation link expired or is invalid. Please try requesting a new confirmation email." %}
+        </p>
+        
+        <p class="mt-6">
+            <a href="{% url 'account_email' %}" class="text-green-600 hover:underline">
+                {% trans "Request New Confirmation Email" %}
+            </a>
+        </p>
+    </div>
+{% endif %}
+{% endblock %}

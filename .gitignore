@@ -39,3 +39,6 @@ venv/
 ENV/
 env/
 temp/
+
+client_secret_*.json
+website/db.sqlite3.bak

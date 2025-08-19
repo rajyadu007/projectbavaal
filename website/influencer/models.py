@@ -8,6 +8,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 import datetime # Import datetime for age calculation
 from django.core.exceptions import ValidationError # Import ValidationError
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -219,3 +220,28 @@ def delete_influencer_main_images_on_object_deletion(sender, instance, **kwargs)
     # Pass the actual FieldFile objects to the helper
     delete_file_if_exists(instance.profile_pic)
     delete_file_if_exists(instance.poster_pic)
+
+class InfluencerCommunityPost(models.Model):
+    influencer = models.ForeignKey('Influencer', on_delete=models.CASCADE, related_name='community_posts')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
+    is_approved = models.BooleanField(default=True)  # for moderation
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f'{self.user.username} on {self.influencer.name}'
+
+class PostNotification(models.Model):
+    post = models.ForeignKey(InfluencerCommunityPost, on_delete=models.CASCADE, related_name='notifications')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # user to notify
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Notify {self.user.username} about post {self.post.id}'

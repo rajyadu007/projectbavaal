@@ -1,0 +1,64 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load socialaccount %}
+
+{% block title %}Login{% endblock %}
+{% block heading %}Login to your account{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'account_login' %}" class="space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div>
+        <label class="block text-gray-700 text-sm mb-1">Email</label>
+        {{ form.login|add_class:"w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-300" }}
+        {{ form.login.errors }}
+    </div>
+
+    <div>
+        <label class="block text-gray-700 text-sm mb-1">Password</label>
+        {{ form.password|add_class:"w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-300" }}
+        {{ form.password.errors }}
+        <div class="text-right mt-1">
+            <a href="{% url 'account_reset_password' %}" class="text-sm text-green-600 hover:underline">
+                Forgot Password?
+            </a>
+        </div>
+    </div>
+
+    <div class="flex items-center">
+        {{ form.remember|add_class:"h-4 w-4 text-green-600 focus:ring-green-300 rounded" }}
+        <label for="{{ form.remember.id_for_label }}" class="ml-2 block text-sm text-gray-700">
+            Remember me
+        </label>
+    </div>
+
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+
+    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+        Login
+    </button>
+</form>
+
+<div class="text-center text-sm text-gray-600 mt-4 space-y-2">
+    <p>
+        Don't have an account?
+        <a href="{% url 'account_signup' %}" class="text-green-600 hover:underline">Sign Up</a>
+    </p>
+</div>
+
+<hr class="my-6">
+
+<div class="space-y-3">
+    {% for provider in socialaccount_providers %}
+        <a href="{% provider_login_url provider.id %}"
+           class="w-full flex items-center justify-center border py-2 rounded-lg hover:bg-gray-50 transition">
+            Continue with {{ provider.name }}
+        </a>
+    {% endfor %}
+</div>
+{% endblock %}

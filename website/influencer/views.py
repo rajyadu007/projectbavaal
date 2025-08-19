@@ -9,16 +9,46 @@ from django.core.files import File # For saving files from URLs
 import requests # For making HTTP requests to fetch images
 import os
 from io import BytesIO # To handle image data in memory
-from .models import Influencer
+from .models import Influencer, InfluencerCommunityPost, PostNotification
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 from .forms import (
     InfluencerProfileForm,
     InfluencerImageFormSet, # Import the formsets
     InfluencerVideoFormSet,
     InfluencerTweetFormSet,
+    CommunityPostForm,
 )
+
+def influencer_community_view(request, influencer_id):
+    influencer = get_object_or_404(Influencer, id=influencer_id)
+    posts = influencer.community_posts.filter(parent__isnull=True, is_approved=True)
+
+    if request.method == 'POST':
+        form = CommunityPostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.influencer = influencer
+            post.save()
+
+            # Notify parent user if this is a reply
+            if post.parent:
+                PostNotification.objects.create(post=post, user=post.parent.user)
+
+            return redirect('influencer_community', influencer_id=influencer.id)
+    else:
+        form = CommunityPostForm()
+
+    return render(request, 'community/influencer_community.html', {
+        'influencer': influencer,
+        'posts': posts,
+        'form': form
+    })
+
 
 @login_required
 def create_or_update_influencer_profile(request, slug=None):
@@ -67,28 +97,38 @@ def create_or_update_influencer_profile(request, slug=None):
     }
     return render(request, 'influencer/influencer_profile_form.html', context)
 
-
-def influencer_detail(request, slug):
-    """
-    A simple view to display influencer details.
-    """
+@login_required
+def profile_detail(request, slug):
     influencer = get_object_or_404(Influencer, slug=slug)
-    context = {
-        'influencer': influencer,
-        'page_title': f"{influencer.name}'s Profile",
-    }
-    return render(request, 'influencer/influencer_detail.html', context)
+    posts = influencer.community_posts.filter(parent__isnull=True, is_approved=True)
 
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        parent_id = request.POST.get('parent')
+        parent_post = None
+        if parent_id:
+            parent_post = InfluencerCommunityPost.objects.filter(id=parent_id).first()
 
+        if content:
+            new_post = InfluencerCommunityPost.objects.create(
+                influencer=influencer,
+                user=request.user,
+                parent=parent_post,
+                content=content
+            )
 
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                html = render_to_string('influencer/_community_post.html', {'post': new_post}, request)
+                return JsonResponse({
+                    'success': True,
+                    'html': html,
+                    'is_reply': bool(parent_post),
+                    'parent_id': parent_post.id if parent_post else None,
+                })
 
-def profile_detail(request, slug): # Changed from pk to slug
-    """
-    Displays the detail page for an influencer, fetched by their slug.
-    """
-    influencer = get_object_or_404(Influencer, slug=slug) # Fetch by slug
-    return render(request, 'influencer/profile.html', {'influencer': influencer}) # Renders the portfolio.html with influencer data
+            return redirect('profile_detail', slug=slug)
 
+    return render(request, 'influencer/profile.html', {'influencer': influencer, 'posts': posts})
 
 def influencer_portfolio_view(request):
     return render(request, 'influencer/portfolio.html')

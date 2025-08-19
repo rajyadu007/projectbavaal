@@ -23,7 +23,7 @@ urlpatterns = [
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 
     # AllAuth URLs
-    path('accounts/', include('allauth.urls')),
+    path("accounts/", include("allauth.urls")),  # allauth routes
 
     # Webstory App URLspath('about/', about_page, name='about'),
     path("web-stories/", include("webstory.urls")),

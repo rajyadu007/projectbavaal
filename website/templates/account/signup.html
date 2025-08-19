@@ -1,0 +1,49 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load socialaccount %}
+
+{% block title %}Sign Up{% endblock %}
+{% block heading %}Create Account{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'account_signup' %}" class="space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div>
+        <label class="block text-gray-700 text-sm mb-1">Email</label>
+        {{ form.email|add_class:"w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-300" }}
+    </div>
+
+    <div>
+        <label class="block text-gray-700 text-sm mb-1">Password</label>
+        {{ form.password1|add_class:"w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-300" }}
+    </div>
+
+    <div>
+        <label class="block text-gray-700 text-sm mb-1">Confirm Password</label>
+        {{ form.password2|add_class:"w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-300" }}
+    </div>
+
+    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+        Sign Up
+    </button>
+</form>
+
+<p class="text-center text-sm text-gray-600 mt-4">
+    Already have an account?
+    <a href="{% url 'account_login' %}" class="text-green-600 hover:underline">Login</a>
+</p>
+
+<hr class="my-6">
+
+<div class="space-y-3">
+    {% for provider in socialaccount_providers %}
+        <a href="{% provider_login_url provider.id %}"
+           class="w-full flex items-center justify-center border py-2 rounded-lg hover:bg-gray-50 transition">
+            Continue with {{ provider.name }}
+        </a>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -30,20 +30,56 @@
 {% endblock %}
 
 {% block body %}
-  <header class="bg-white shadow-sm py-4">
-    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-      <a href="/" class="text-2xl font-bold text-primary mb-4 md:mb-0">bavaal.com</a>
-      <nav class="flex gap-4">
-        <a href="#" class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300">Login</a>
-        <a href="#" class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300">Sign Up</a>
-        <a href="{% url 'blog_list' %}" class="px-4 py-2 rounded-md bg-primary text-white border border-primary hover:bg-highlight transition-colors duration-300">Blogs</a>
-      </nav>
+<header x-data="{ open: false }" class="bg-white shadow-sm py-4 relative">
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <a href="/" class="text-2xl font-bold text-primary">bavaal.com</a>
+
+    <!-- Mobile menu button (same as before) -->
+    <div class="sm:hidden">
+      <button @click="open = !open" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
-  </header>
+
+    <!-- Updated nav section -->
+    <nav :class="{'flex': open, 'hidden': !open}" 
+         class="sm:flex absolute sm:relative top-full left-0 w-full bg-white shadow-md sm:shadow-none flex-col sm:flex-row gap-4 mt-0 p-4 sm:p-0 z-50 sm:justify-end"> <!-- Added sm:justify-end -->
+      
+      <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center sm:items-end"> <!-- Added items-center for mobile, items-end for desktop -->
+        {% if user.is_authenticated %}
+          <span class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary text-center sm:text-right"> <!-- Changed to sm:text-right -->
+            Hello, {{ user.get_full_name|default:user.email }}
+          </span>
+          <a href="{% url 'account_logout' %}" 
+             class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300 text-center sm:text-right"> <!-- Changed to sm:text-right -->
+            Logout
+          </a>
+        {% else %}
+          <a href="{% url 'account_login' %}" 
+             class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300 text-center sm:text-right"> <!-- Changed to sm:text-right -->
+            Login
+          </a>
+          <a href="{% url 'account_signup' %}" 
+             class="px-4 py-2 rounded-md bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-300 text-center sm:text-right"> <!-- Changed to sm:text-right -->
+            Sign Up
+          </a>
+        {% endif %}
+        <a href="{% url 'blog_list' %}" 
+           class="px-4 py-2 rounded-md bg-primary text-white border border-primary hover:bg-highlight transition-colors duration-300 text-center sm:text-right"> <!-- Changed to sm:text-right -->
+          Blogs
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
 
   <div class="container w-[90%] max-w-6xl mx-auto py-4 flex-grow">
     {% block content %}{% endblock %}
   </div>
-
   {% include 'footer.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 {% endblock %}

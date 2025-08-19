@@ -6,6 +6,16 @@ from django.forms import inlineformset_factory
 from django.utils.text import slugify
 from .models import Influencer, Category, InfluencerTweet, InfluencerImage, InfluencerVideo
 
+from .models import InfluencerCommunityPost
+
+class CommunityPostForm(forms.ModelForm):
+    class Meta:
+        model = InfluencerCommunityPost
+        fields = ['content', 'parent']
+        widgets = {
+            'parent': forms.HiddenInput()
+        }
+        
 class InfluencerProfileForm(forms.ModelForm):
     """
     Form for creating/updating Influencer profiles.

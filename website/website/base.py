@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'django.contrib.sitemaps',
+    'widget_tweaks',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -177,21 +179,40 @@ CKEDITOR_5_CONFIGS = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_ID = 1 # Required by django.contrib.sites
-
-# Allauth specific settings
-LOGIN_REDIRECT_URL = '/' # Where to redirect after login
-ACCOUNT_LOGOUT_REDIRECT_URL = '/' # Where to redirect after logout
-ACCOUNT_LOGIN_METHODS = {'email', 'username'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
+SITE_ID = 2 # Required by django.contrib.sites
 
 AUTHENTICATION_BACKENDS = (
     # Required for allauth to function
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Default login
+    'allauth.account.auth_backends.AuthenticationBackend',  # allauth
 )
+
+# Allauth settings for email-only authentication
+#ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+# Email verification settings
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # or 'optional' for less strict
+#ACCOUNT_EMAIL_REQUIRED = True
+
+# Other recommended settings
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGIN_REDIRECT_URL = '/'
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+LOGIN_REDIRECT_URL = '/'  # Redirect to home page after login
+LOGOUT_REDIRECT_URL = '/'  # Redirect to home page after logout
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'nigudhaprem@gmail.com'          # Replace with your Gmail address
+EMAIL_HOST_PASSWORD = 'tvet xexh kmkn ucsb'         # Use an App Password, NOT your Gmail password
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

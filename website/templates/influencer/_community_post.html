@@ -1,0 +1,43 @@
+{% load static %}
+
+{% if post.parent %}
+<div class="message ml-16 mb-3 pb-3 border-l border-primary-light pl-4">
+{% else %}
+<div class="message mb-5 pb-5 border-b border-primary-light" id="post-{{ post.id }}">
+{% endif %}
+    <div class="message-header flex items-center mb-2">
+         {% if post.user.userprofile.profile_picture %}
+            <img src="{{ post.user.userprofile.profile_picture.url }}" 
+                 alt="{{ post.user.username }}" 
+                 class="message-avatar {% if post.parent %}w-7 h-7{% else %}w-9 h-9{% endif %} rounded-full object-cover mr-2">
+        {% else %}
+            <img src="{% static 'images/default_profile.png' %}" 
+                 alt="{{ post.user.username }}" 
+                 class="message-avatar {% if post.parent %}w-7 h-7{% else %}w-9 h-9{% endif %} rounded-full object-cover mr-2">
+        {% endif %}
+        <span class="message-user font-semibold text-text">{{ post.user.first_name|default_if_none:'' }} {{ post.user.last_name|default_if_none:'' }}{% if not post.user.first_name and not post.user.last_name %}{{ post.user.username }}{% endif %}</span>
+        <span class="message-time text-xs text-text-light ml-2">{{ post.created_at|timesince }} ago</span>
+    </div>
+    <p class="message-content {% if post.parent %}ml-0{% else %}ml-12{% endif %} text-text-light leading-relaxed text-sm">{{ post.content }}</p>
+
+    {% if not post.parent %}
+    <!-- Reply toggle -->
+    <a href="#" class="toggle-reply text-sm text-primary hover:underline ml-12" data-post-id="{{ post.id }}">Reply</a>
+
+    <!-- Hidden reply form -->
+    <div class="reply-form-container ml-12 mt-2 mb-2 hidden" id="reply-form-{{ post.id }}">
+        <form method="POST" class="reply-form flex gap-2" data-parent="{{ post.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="parent" value="{{ post.id }}">
+            <input type="text" name="content" placeholder="Write a reply..."
+                   class="flex-1 px-3 py-2 bg-light border border-primary-light rounded-full text-sm focus:outline-none focus:border-primary">
+            <button type="submit" class="px-3 py-2 bg-primary text-white rounded-full text-sm hover:bg-highlight">Reply</button>
+        </form>
+    </div>
+
+    <!-- Nested replies -->
+    {% for reply in post.replies.all %}
+        {% include "influencer/_community_post.html" with post=reply %}
+    {% endfor %}
+    {% endif %}
+</div>

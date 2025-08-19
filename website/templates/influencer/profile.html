@@ -411,7 +411,85 @@
             </div>
             {% endif %}
         </div>
+
+    <div class="community-section bg-white rounded-2xl p-6 shadow-md">
+        <h2 class="section-title text-2xl font-semibold mb-5 text-primary">Community Chat</h2>
+
+        <!-- Chat container -->
+        <div class="chat-container h-[600px] overflow-y-auto pr-2" id="chat-container">
+            {% for post in posts %}
+                {% include "influencer/_community_post.html" with post=post %}
+            {% empty %}
+                <p class="text-text-light">No community messages yet. Be the first to post!</p>
+            {% endfor %}
+        </div>
+
+        <!-- New top-level post form -->
+        <div class="chat-input-container flex gap-4 mt-4">
+            <img src="{{ request.user.profile.avatar.url|default:'https://randomuser.me/api/portraits/lego/3.jpg' }}" 
+                alt="You" class="chat-input-avatar w-12 h-12 rounded-full object-cover">
+            <form method="POST" class="top-post-form flex-1 flex" data-parent="">
+                {% csrf_token %}
+                <input type="hidden" name="parent" value="">
+                <input type="text" name="content" placeholder="Write a new message..."
+                    class="flex-1 px-5 py-3 bg-light border border-primary-light rounded-full text-base text-text focus:outline-none focus:border-primary">
+                <button type="submit" class="chat-send w-12 h-12 rounded-full bg-primary text-white border-none flex items-center justify-center cursor-pointer ml-3 transition-all duration-300 hover:bg-highlight hover:-translate-y-0.5">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
     </div>
+</div>
+
+<!-- JS: Toggle replies + AJAX form submission -->
+<script>
+    // Toggle reply inputs
+    document.querySelectorAll('.toggle-reply').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = this.dataset.postId;
+            const form = document.getElementById(`reply-form-${postId}`);
+            form.classList.toggle('hidden');
+            form.querySelector('input[name="content"]').focus();
+        });
+    });
+
+    // AJAX form submission
+    function ajaxFormSubmit(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = window.location.href;
+            const formData = new FormData(form);
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {'X-Requested-With': 'XMLHttpRequest'},
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const chatContainer = document.getElementById('chat-container');
+                    if (data.is_reply) {
+                        const parentPost = document.getElementById(`post-${data.parent_id}`);
+                        parentPost.insertAdjacentHTML('beforeend', data.html);
+                    } else {
+                        chatContainer.insertAdjacentHTML('beforeend', data.html);
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }
+                    form.reset();
+                    form.closest('.reply-form-container')?.classList.add('hidden');
+                } else {
+                    alert('Error posting message');
+                }
+            });
+        });
+    }
+
+    // Attach AJAX to all forms
+    document.querySelectorAll('.reply-form, .top-post-form').forEach(ajaxFormSubmit);
+</script>
+
 
     {# GLOBAL JAVASCRIPT FOR EMBEDS - Loaded once at the end of the content block #}
     {# Instagram embed script #}
