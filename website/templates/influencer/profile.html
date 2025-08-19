@@ -426,68 +426,113 @@
 
         <!-- New top-level post form -->
         <div class="chat-input-container flex gap-4 mt-4">
-            <img src="{{ request.user.profile.avatar.url|default:'https://randomuser.me/api/portraits/lego/3.jpg' }}" 
-                alt="You" class="chat-input-avatar w-12 h-12 rounded-full object-cover">
-            <form method="POST" class="top-post-form flex-1 flex" data-parent="">
-                {% csrf_token %}
-                <input type="hidden" name="parent" value="">
-                <input type="text" name="content" placeholder="Write a new message..."
-                    class="flex-1 px-5 py-3 bg-light border border-primary-light rounded-full text-base text-text focus:outline-none focus:border-primary">
-                <button type="submit" class="chat-send w-12 h-12 rounded-full bg-primary text-white border-none flex items-center justify-center cursor-pointer ml-3 transition-all duration-300 hover:bg-highlight hover:-translate-y-0.5">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
+            {% if user.is_authenticated %}
+                {% if post.user.userprofile.profile_picture %}
+                    <img src="{{ post.user.userprofile.profile_picture.url }}" 
+                        alt="{{ post.user.username }}" 
+                        class="message-avatar {% if post.parent %}w-7 h-7{% else %}w-9 h-9{% endif %} rounded-full object-cover mr-2">
+                {% else %}
+                    <img src="{% static 'images/default_profile.png' %}" 
+                        alt="{{ post.user.username }}" 
+                        class="message-avatar {% if post.parent %}w-7 h-7{% else %}w-9 h-9{% endif %} rounded-full object-cover mr-2">
+                {% endif %}
+                <form method="POST" class="top-post-form flex-1 flex" data-parent="">
+                    {% csrf_token %}
+                    <input type="hidden" name="parent" value="">
+                    <input type="text" name="content" placeholder="Write a new message..."
+                        class="flex-1 px-5 py-3 bg-light border border-primary-light rounded-full text-base text-text focus:outline-none focus:border-primary">
+                    <button type="submit" class="chat-send w-12 h-12 rounded-full bg-primary text-white border-none flex items-center justify-center ml-3 hover:bg-highlight">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            {% else %}
+                <p class="text-text-light text-sm ml-3">
+                    <a href="{% url 'account_login' %}" class="text-primary hover:underline">Login</a> or 
+                    <a href="{% url 'account_signup' %}" class="text-primary hover:underline">Signup</a> to join the community chat.
+                </p>
+            {% endif %}
         </div>
     </div>
 </div>
 
 <!-- JS: Toggle replies + AJAX form submission -->
 <script>
-    // Toggle reply inputs
-    document.querySelectorAll('.toggle-reply').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+document.addEventListener('DOMContentLoaded', function() {
+    const chatContainer = document.getElementById('chat-container');
+
+    // Event delegation for toggling reply forms
+    chatContainer.addEventListener('click', function(e) {
+        const toggle = e.target.closest('.toggle-reply');
+        if (toggle) {
             e.preventDefault();
-            const postId = this.dataset.postId;
+            const postId = toggle.dataset.postId;
             const form = document.getElementById(`reply-form-${postId}`);
-            form.classList.toggle('hidden');
-            form.querySelector('input[name="content"]').focus();
-        });
+            if (form) {
+                form.classList.toggle('hidden');
+                const input = form.querySelector('input[name="content"]');
+                if (input) input.focus();
+            }
+        }
     });
 
     // AJAX form submission
     function ajaxFormSubmit(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+
             const url = window.location.href;
             const formData = new FormData(form);
 
             fetch(url, {
                 method: 'POST',
                 body: formData,
-                headers: {'X-Requested-With': 'XMLHttpRequest'},
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
             })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    const chatContainer = document.getElementById('chat-container');
                     if (data.is_reply) {
+                        // Append reply to parent post
                         const parentPost = document.getElementById(`post-${data.parent_id}`);
                         parentPost.insertAdjacentHTML('beforeend', data.html);
+                        parentPost.scrollIntoView({ behavior: 'smooth', block: 'end' });
                     } else {
+                        // Append new top-level post
                         chatContainer.insertAdjacentHTML('beforeend', data.html);
                         chatContainer.scrollTop = chatContainer.scrollHeight;
                     }
+
+                    // Reset the form
                     form.reset();
                     form.closest('.reply-form-container')?.classList.add('hidden');
                 } else {
-                    alert('Error posting message');
+                    // Show friendly message for guests
+                    alert(data.error || 'Login or signup to post in the community.');
                 }
+            })
+            .catch(err => {
+                console.error('Error posting message:', err);
+                alert('An error occurred. Please try again.');
             });
         });
     }
 
-    // Attach AJAX to all forms
+    // Attach AJAX to all existing forms
     document.querySelectorAll('.reply-form, .top-post-form').forEach(ajaxFormSubmit);
+
+    // Optional: Observe for new forms being added dynamically
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) { // Element node
+                    node.querySelectorAll('.reply-form').forEach(ajaxFormSubmit);
+                }
+            });
+        });
+    });
+
+    observer.observe(chatContainer, { childList: true, subtree: true });
+});
 </script>
 
 

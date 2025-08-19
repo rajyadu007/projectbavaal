@@ -97,17 +97,21 @@ def create_or_update_influencer_profile(request, slug=None):
     }
     return render(request, 'influencer/influencer_profile_form.html', context)
 
-@login_required
 def profile_detail(request, slug):
     influencer = get_object_or_404(Influencer, slug=slug)
     posts = influencer.community_posts.filter(parent__isnull=True, is_approved=True)
 
+    # Handle POST only if user is authenticated
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                'success': False,
+                'error': 'You must login to post.'
+            })
+
         content = request.POST.get('content')
         parent_id = request.POST.get('parent')
-        parent_post = None
-        if parent_id:
-            parent_post = InfluencerCommunityPost.objects.filter(id=parent_id).first()
+        parent_post = InfluencerCommunityPost.objects.filter(id=parent_id).first() if parent_id else None
 
         if content:
             new_post = InfluencerCommunityPost.objects.create(

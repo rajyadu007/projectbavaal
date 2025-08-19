@@ -1,6 +1,6 @@
 # admin.py
 from django.contrib import admin
-from .models import Influencer, InfluencerImage, InfluencerVideo, InfluencerTweet
+from .models import Influencer, InfluencerImage, InfluencerVideo, InfluencerTweet, InfluencerCommunityPost
 
 class BaseAdmin(admin.ModelAdmin):
     def get_list_display(self, request):
@@ -29,3 +29,8 @@ class InfluencerVideoAdmin(BaseAdmin):
 @admin.register(InfluencerTweet)
 class InfluencerTweetAdmin(BaseAdmin):
     pass
+
+@admin.register(InfluencerCommunityPost)
+class InfluencerCommunityPostAdmin(BaseAdmin):
+    pass
+
