@@ -42,3 +42,4 @@ temp/
 
 client_secret_*.json
 website/db.sqlite3.bak
+website/templates/base_main.html
