@@ -4,7 +4,8 @@ from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.contrib.sitemaps.views import sitemap
 from . import sitemaps as sm 
-from . import views 
+from . import views
+from bavaalapps import views as appsviews
 from influencer.views import profile_detail
 
 sitemaps = {
@@ -47,7 +48,12 @@ urlpatterns = [
     path('disclaimer/', views.disclaimer_page, name='disclaimer'),
     path('privacy-policy/', views.policy_page, name='privacy-policy'),
     path('terms-and-conditions/', views.terms_page, name='terms-and-conditions'),
-    path('apps/', include('bavaalapps.urls')),
+
+    #bavaalapps
+    path('image-grid/', appsviews.index, name='image-grid'),
+    path('image-grid/upload/', appsviews.upload_images, name='upload_images'),
+    path('image-grid/generate_word/', appsviews.generate_word_document, name='generate_word_document'),
+    
     path('', include('blog.urls')), # This should be the last 'include' for the root, or place specific paths above it.
 ]
 

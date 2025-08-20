@@ -9,7 +9,7 @@ pageseo = {
     # Open Graph (Social Media)
     "og_title": "Image Grid App by Bavaal - Create Image Grids for Reports",
     "og_description": "Upload, arrange, and download image grids in Word format for your reports. Try Bavaal's Image Grid app today!",
-    "og_url": "https://bavaal.com/apps/image-grid",
+    "og_url": "https://bavaal.com/image-grid",
     "og_image": "https://bavaal.com/media/images/Bavaal-Image-Grid-app.original.png",
     "og_image_type": "image/png",
     "og_type": "website", # Changed to website as it's an application page
@@ -24,7 +24,7 @@ pageseo = {
     #"twitter_creator": "@BavaalOfficial", # If the creator is the same as the site
     
     # Technical SEO
-    "canonical_url": "https://bavaal.com/apps/image-grid", # Canonical URL for the app page
+    "canonical_url": "https://bavaal.com/image-grid", # Canonical URL for the app page
 
     
     # Additional Meta
@@ -40,7 +40,7 @@ pageseo = {
         "context": "https://schema.org", # Use @context and @type for JSON-LD
         "type": "WebApplication", # More specific for a web application
         "name": "Image Grid App by Bavaal",
-        "url": "https://bavaal.com/apps/image-grid",
+        "url": "https://bavaal.com/image-grid",
         "description": "An online tool to arrange multiple images into a grid layout and download them in Microsoft Word format for reports and presentations. Image Grid with Captions",
         "applicationCategory": "Multimedia", # or "Office" or "Utilities"
         "operatingSystem": "Web",
