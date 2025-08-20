@@ -9,6 +9,7 @@ from django.dispatch import receiver
 import datetime # Import datetime for age calculation
 from django.core.exceptions import ValidationError # Import ValidationError
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -227,12 +228,12 @@ class InfluencerCommunityPost(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(default=timezone.now, editable=True)
     likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
     is_approved = models.BooleanField(default=True)  # for moderation
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-updated_at']
 
     def __str__(self):
         return f'{self.user.username} on {self.influencer.name}'

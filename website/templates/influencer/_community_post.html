@@ -16,7 +16,7 @@
                 class="message-avatar {% if post.parent %}w-7 h-7{% else %}w-9 h-9{% endif %} rounded-full object-cover mr-2">
         {% endif %}
         <span class="message-user font-semibold text-text">{{ post.user.first_name|default_if_none:'' }} {{ post.user.last_name|default_if_none:'' }}{% if not post.user.first_name and not post.user.last_name %}{{ post.user.username }}{% endif %}</span>
-        <span class="message-time text-xs text-text-light ml-2">{{ post.created_at|timesince }} ago</span>
+        <span class="message-time text-xs text-text-light ml-2">{{ post.updated_at|timesince }} ago</span>
     </div>
     <p class="message-content {% if post.parent %}ml-0{% else %}ml-12{% endif %} text-text-light leading-relaxed text-sm">{{ post.content }}</p>
 
