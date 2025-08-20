@@ -179,7 +179,7 @@ CKEDITOR_5_CONFIGS = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_ID = 2 # Required by django.contrib.sites
+SITE_ID = 1 # Required by django.contrib.sites
 
 AUTHENTICATION_BACKENDS = (
     # Required for allauth to function
